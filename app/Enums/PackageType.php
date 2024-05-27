@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class BookType extends Enum
+final class PackageType extends Enum
 {
     const FREE = 1;
     const BASE = 2;

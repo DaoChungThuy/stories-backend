@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use BenSampo\Enum\Enum;
 
-final class StatusBook extends Enum
+final class StatusStory extends Enum
 {
     const PENDING = 1;
     const ACTIVE = 2;

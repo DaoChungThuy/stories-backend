@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserServiceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('service_package_id');
             $table->timestamp('start_date');
+            $table->enum('status', [UserServiceStatus::ACTIVE, UserServiceStatus::UNACTIVE])->default(UserServiceStatus::ACTIVE);
             $table->timestamps();
         });
     }

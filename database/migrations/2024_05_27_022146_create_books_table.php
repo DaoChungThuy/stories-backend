@@ -1,7 +1,8 @@
 <?php
 
-use App\Enums\BookType;
-use App\Enums\StatusBook;
+use App\Enums\PackageType;
+use App\Enums\StatusStory;
+use App\Enums\StoryType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,9 +22,10 @@ return new class extends Migration
             $table->integer('author_id');
             $table->integer('genre_id');
             $table->string('description')->nullable();
-            $table->enum('status', [StatusBook::PENDING, StatusBook::ACTIVE, StatusBook::BAN])->default(StatusBook::PENDING);
+            $table->enum('status', [StatusStory::PENDING, StatusStory::ACTIVE, StatusStory::BAN])->default(StatusStory::PENDING);
             $table->string('cover_image')->nullable();
-            $table->enum('type', [BookType::FREE, BookType::BASE, BookType::PREMIUM])->default(BookType::FREE);
+            $table->enum('package_type', [PackageType::FREE, PackageType::BASE, PackageType::PREMIUM])->default(PackageType::FREE);
+            $table->enum('story_type', [StoryType::NOVEL, StoryType::COMIC])->default(StoryType::NOVEL);
             $table->softDeletes();
             $table->timestamps();
         });
