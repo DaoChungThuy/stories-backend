@@ -60,6 +60,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the authors for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function authors()
+    {
+        return $this->hasMany(Author::class, 'create_by_user_id', 'id');
+    }
+
+    /**
      * Get the book followed for the user.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
