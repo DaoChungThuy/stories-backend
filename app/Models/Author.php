@@ -10,6 +10,11 @@ class Author extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'author',
         'user_id',
@@ -17,11 +22,11 @@ class Author extends Model
         'avatar',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+    /**
+     * Get the books for the author.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function books()
     {
         return $this->hasMany(Book::class);

@@ -10,8 +10,11 @@ class Book extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'books';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'title',
         'author_id',
@@ -23,31 +26,61 @@ class Book extends Model
         'story_type',
     ];
 
+    /**
+     * Get the comments for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Get the likes for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function bookLikes()
     {
         return $this->hasMany(BookLike::class);
     }
 
+    /**
+     * Get the genre for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function genre()
     {
         return $this->belongsTo(Genre::class);
     }
 
+    /**
+     * Get the chapters for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function chapters()
     {
         return $this->hasMany(Chapter::class);
     }
 
+    /**
+     * Get the follower for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function followers()
     {
         return $this->hasMany(Follower::class);
     }
 
+    /**
+     * Get the author for the book.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function author()
     {
         return $this->belongsTo(Author::class);

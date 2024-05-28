@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserServiceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_chapters', function (Blueprint $table) {
+        Schema::create('user_service_package', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('chapter_id');
-            $table->softDeletes();
+            $table->integer('service_package_id');
+            $table->timestamp('start_date');
+            $table->enum('status', [UserServiceStatus::ACTIVE, UserServiceStatus::UNACTIVE])->default(UserServiceStatus::ACTIVE);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_chapters');
+        Schema::dropIfExists('user_service_pakages');
     }
 };

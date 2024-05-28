@@ -10,8 +10,11 @@ class Chapter extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'chapters';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'book_id',
         'chapter_number',
@@ -19,18 +22,13 @@ class Chapter extends Model
         'chapter_content',
     ];
 
-    public function book()
-    {
-        return $this->belongsTo(Book::class);
-    }
-
+    /**
+     * Get the Images for the chapter.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function chapterImages()
     {
         return $this->hasMany(ChapterImage::class);
-    }
-
-    public function userChapters()
-    {
-        return $this->hasMany(UserChapter::class);
     }
 }
