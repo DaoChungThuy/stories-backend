@@ -25,12 +25,12 @@ class Book extends Model
 
     public function comments()
     {
-        // return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function bookLikes()
     {
-        // return $this->hasMany(BookLike::class);
+        return $this->hasMany(BookLike::class);
     }
 
     public function genre()
@@ -45,11 +45,11 @@ class Book extends Model
 
     public function followers()
     {
-        // return $this->hasMany(Follower::class);
+        return $this->hasMany(Follower::class);
     }
 
     public function author()
     {
-        // return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class);
     }
 }

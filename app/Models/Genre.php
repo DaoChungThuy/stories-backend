@@ -17,7 +17,8 @@ class Genre extends Model
         'cover_image',
     ];
 
-    public function book(){
+    public function book()
+    {
         return $this->hasMany(Book::class);
     }
 }

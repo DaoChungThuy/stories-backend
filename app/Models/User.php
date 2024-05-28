@@ -56,21 +56,21 @@ class User extends Authenticatable
 
     public function comments()
     {
-        // return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function bookLikes()
     {
-        // return $this->hasMany(BookLike::class);
+        return $this->hasMany(BookLike::class);
     }
 
     public function followers()
     {
-        //return $this->hasMany(Follower::class);
+        return $this->hasMany(Follower::class);
     }
 
     public function userChapters()
     {
-        // return $this->hasMany(UserChapter::class);
+        return $this->hasMany(UserChapter::class);
     }
 }

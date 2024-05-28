@@ -24,11 +24,13 @@ class Chapter extends Model
         return $this->belongsTo(Book::class);
     }
 
-    public function chapterImages(){
+    public function chapterImages()
+    {
         return $this->hasMany(ChapterImage::class);
     }
 
-    public function userChapters(){
-        // return $this->hasMany(UserChapter::class);
+    public function userChapters()
+    {
+        return $this->hasMany(UserChapter::class);
     }
 }
