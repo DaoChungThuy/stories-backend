@@ -17,7 +17,7 @@ class Author extends Model
      */
     protected $fillable = [
         'author',
-        'user_id',
+        'create_by_user_id',
         'author_name',
         'avatar',
     ];
