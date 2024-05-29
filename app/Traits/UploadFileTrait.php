@@ -10,10 +10,10 @@ trait UploadFileTrait
     public function uploadFile(UploadedFile $file)
     {
         $imageName = 'author_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $path_name = 'public/image/author/avatar/';
+        $path_name = 'image/';
 
-        if (Storage::disk('local')->put($path_name . $imageName, file_get_contents($file->getRealPath()))) {
-            return $path_name . $imageName;
+        if (Storage::disk('public')->put($path_name . $imageName, file_get_contents($file->getRealPath()))) {
+            return $imageName;
         }
 
         return false;

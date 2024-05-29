@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Author;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Author\CreateAuthorRequest;
+use App\Http\Resources\Api\Author\AuthorResource;
 use App\Services\Api\Author\CreateAuthorService;
-use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
@@ -19,7 +19,7 @@ class AuthorController extends Controller
 
         return $this->responseSuccess([
             'message' => __('author.register_success'),
-            'data' => $author,
+            'data' => new AuthorResource($author),
         ]);
     }
 }
