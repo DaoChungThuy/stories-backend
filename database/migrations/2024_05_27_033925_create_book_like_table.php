@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('book_likes', function (Blueprint $table) {
+        Schema::create('book_like', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('book_id');

@@ -4,13 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +22,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'avatar',
+        'full_name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -41,4 +48,44 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the book liked for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function bookLikes()
+    {
+        return $this->belongsToMany(Book::class, 'book_like', 'user_id', 'book_id')->withTimestamps();
+    }
+
+    /**
+     * Get the authors for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function authors()
+    {
+        return $this->hasMany(Author::class, 'create_by_user_id', 'id');
+    }
+
+    /**
+     * Get the book followed for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function bookFollows()
+    {
+        return $this->belongsToMany(Book::class, 'follower', 'user_id', 'book_id')->withTimestamps();
+    }
+
+    /**
+     * Get the chapter read for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function userChapters()
+    {
+        return $this->belongsToMany(Chapter::class, 'user_chapter', 'user_id', 'chapter_id')->withTimestamps();
+    }
 }
