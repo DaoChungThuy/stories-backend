@@ -10,20 +10,13 @@ class UserChapter extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'user_chapters';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'user_id',
         'chapter_id',
     ];
-
-    public function Chapter()
-    {
-        return $this->belongsTo(Chapter::class);
-    }
-
-    public function User()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

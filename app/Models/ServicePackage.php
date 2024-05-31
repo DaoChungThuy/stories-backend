@@ -10,15 +10,15 @@ class ServicePackage extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'service_package_name',
         'price',
         'duration',
         'type',
     ];
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_service_packages', 'user_id', 'service_package_id');
-    }
 }

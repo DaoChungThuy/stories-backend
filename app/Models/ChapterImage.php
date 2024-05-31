@@ -10,16 +10,14 @@ class ChapterImage extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'chapter_images';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'chapter_id',
         'url',
         'image_number',
     ];
-
-    public function chapter()
-    {
-        return $this->belongsTo(Chapter::class);
-    }
 }

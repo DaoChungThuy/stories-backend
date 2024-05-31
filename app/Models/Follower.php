@@ -10,19 +10,14 @@ class Follower extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'user_id',
         'book_id',
         'is_notice',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function book()
-    {
-        return $this->belongsTo(Book::class);
-    }
 }

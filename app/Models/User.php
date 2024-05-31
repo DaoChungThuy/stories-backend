@@ -51,34 +51,51 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * get full url of image avatar
+     */
     public function getAttributeImageURL()
     {
-        // Storage::disk('local')->put('example.txt', 'Contents');
         return asset(Storage::get($this->avatar));
     }
 
-    public function ahthors()
-    {
-        return $this->hasMany(Author::class);
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
-
+    /**
+     * Get the book liked for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function bookLikes()
     {
-        return $this->hasMany(BookLike::class);
+        return $this->belongsToMany(Book::class, 'book_like', 'user_id', 'book_id')->withTimestamps();
     }
 
-    public function followers()
+    /**
+     * Get the authors for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function authors()
     {
-        return $this->hasMany(Follower::class);
+        return $this->hasMany(Author::class, 'create_by_user_id', 'id');
     }
 
+    /**
+     * Get the book followed for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function bookFollows()
+    {
+        return $this->belongsToMany(Book::class, 'follower', 'user_id', 'book_id')->withTimestamps();
+    }
+
+    /**
+     * Get the chapter read for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function userChapters()
     {
-        return $this->hasMany(UserChapter::class);
+        return $this->belongsToMany(Chapter::class, 'user_chapter', 'user_id', 'chapter_id')->withTimestamps();
     }
 }
