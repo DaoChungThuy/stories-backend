@@ -21,5 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 Route::POST('payment', [PaymentController::class, 'payment']);
