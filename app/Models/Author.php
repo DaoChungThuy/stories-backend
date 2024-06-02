@@ -18,6 +18,7 @@ class Author extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'author',
         'create_by_user_id',
         'author_name',
         'avatar',
