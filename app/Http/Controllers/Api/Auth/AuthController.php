@@ -28,6 +28,10 @@ class AuthController extends Controller
             return $this->responseErrors(__('auth.email_not_verified'), Response::HTTP_UNAUTHORIZED);
         }
 
+        if($user->deleted_at != null) {
+            return $this->responseErrors(__('auth.unauthorized'), Response::HTTP_UNAUTHORIZED);
+        }
+
         return $this->responseSuccess([
             'user' => $user,
             'access_token' => $token,
