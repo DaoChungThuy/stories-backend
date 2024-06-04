@@ -24,7 +24,7 @@ class SendEmailService extends BaseService
             $token = md5(mt_rand(10000, 99999) . time());
 
             if ($user) {
-                $this->userRepository->update(['hash_active' => $token], $user->id);
+                $this->userRepository->update(['verification_token' => $token], $user->id);
 
                 Mail::to($this->data['email'])->send(new UserActiveEmail($token));
 

@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api\User;
 use App\Http\Requests\Api\BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends BaseRequest
+class UserRegisterRequest extends BaseRequest
 {
     /**
      * Get the validation rules that apply to the request.

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\User\RegisterRequest;
+use App\Http\Requests\Api\User\UserRegisterRequest;
 use App\Services\Auth\VertifyEmailUserService;
 use App\Services\Email\SendEmailService;
 use App\Services\User\RegisterUserService;
@@ -15,10 +15,10 @@ class AuthController extends Controller
 {
     /**
      * sign up account for user
-     * @param RegisterRequest $request
+     * @param UserRegisterRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(RegisterRequest $request)
+    public function register(UserRegisterRequest $request)
     {
         try {
             $user = resolve(RegisterUserService::class)->setParams($request->validated())->handle();
