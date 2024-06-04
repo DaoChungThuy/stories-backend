@@ -11,7 +11,7 @@ class AuthorController extends Controller
 {
     public function store(CreateAuthorRequest $request)
     {
-        $author = resolve(CreateAuthorService::class)->setParams($request->all())->handle();
+        $author = resolve(CreateAuthorService::class)->setParams($request->validated())->handle();
 
         if (!$author) {
             return $this->responseErrors(__('author.register_failed'));
