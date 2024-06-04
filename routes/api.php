@@ -21,3 +21,7 @@ use Illuminate\Support\Facades\Route;
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
     });
 });
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/send-email', [AuthController::class, 'sendEmail']);
+Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
