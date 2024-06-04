@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+ Route::middleware('auth:api')->group(function () {
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
+    });
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
-Route::POST('payment', [PaymentController::class, 'payment']);
