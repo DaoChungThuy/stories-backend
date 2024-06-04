@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Crawl\CrawlStoryController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
+
+Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
