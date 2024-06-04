@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\RegisterRequest;
-use App\Mail\User\UserActiveEmail;
+use App\Http\Requests\Api\User\RegisterRequest;
 use App\Services\Auth\VertifyEmailUserService;
 use App\Services\Email\SendEmailService;
 use App\Services\User\RegisterUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -23,7 +21,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         try {
-            $user = resolve(RegisterUserService::class)->setParams($request->all())->handle();
+            $user = resolve(RegisterUserService::class)->setParams($request->validated())->handle();
 
             if ($user) {
                 return $this->responseSuccess([
@@ -49,7 +47,7 @@ class AuthController extends Controller
         $check = resolve(VertifyEmailUserService::class)->setParams($token)->handle();
 
         if ($check) {
-            return redirect('http://localhost:8080/');
+            return redirect(env('VUE_URL'));
         }
 
         return $this->responseErrors(__('messages.error_server'));

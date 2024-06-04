@@ -25,9 +25,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function vertifyEmail($token)
     {
-        return $this->model->where('hash_active', $token)
+        return $this->model->where('verification_token', $token)
             ->update([
-                'hash_active' => null,
+                'verification_token' => null,
                 'email_verified_at' => now()
             ]);
     }

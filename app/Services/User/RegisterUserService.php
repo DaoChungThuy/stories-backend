@@ -2,13 +2,11 @@
 
 namespace App\Services\User;
 
-use App\Interfaces\User\UserRepositoryInterface;
 use App\Mail\User\UserActiveEmail;
-use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class RegisterUserService extends CreateUserService
 {
@@ -19,10 +17,9 @@ class RegisterUserService extends CreateUserService
 
             $user = parent::handle();
 
-            $email = $this->data['email'];
-            $token = md5(mt_rand(10000, 99999) . time());
-            Mail::to($email)->send(new UserActiveEmail($token));
-            $user = $this->userRepository->update(['hash_active' => $token], $user->id);
+            $token = Str::random(32);
+            Mail::to($this->data['email'])->send(new UserActiveEmail($token));
+            $user = $this->userRepository->update(['verification_token' => $token], $user->id);
 
             DB::commit();
 
