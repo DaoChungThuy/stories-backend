@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
+
+Route::group(['prefix' => 'genre'], function () {
+    Route::post('create', [GenreController::class, 'store']);
+    Route::get('list', [GenreController::class, 'index']);
+    Route::put('update/{id}', [GenreController::class, 'update']);
+    Route::delete('delete/{id}', [GenreController::class, 'destroy']);
+});
