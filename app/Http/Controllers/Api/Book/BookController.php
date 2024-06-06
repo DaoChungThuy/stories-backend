@@ -13,9 +13,15 @@ class BookController extends Controller
         $lines = explode("\n", $request->input('old_description'));
         $filteredLines = array_filter($lines, 'trim');
         $oldDescription = implode("\n", $filteredLines);
-
         $newDescription = resolve(GenerateDescBookService::class)->generateDesc($oldDescription);
 
-        return response()->json($newDescription);
+        if (isset($newDescription['candidates'][0]['content']['parts'][0]['text'])) {
+            $result = $newDescription['candidates'][0]['content']['parts'][0]['text'];
+        } else {
+            $result = $oldDescription;
+        }
+        $result = preg_replace('/##|\*/', '', $result);
+
+        return response()->json($result);
     }
 }
