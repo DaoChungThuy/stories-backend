@@ -21,8 +21,10 @@ class PaymentProcessorService extends BaseService
     public function handle()
     {
         try {
-            $this->paymentGateway->payment($this->data->amount);
-            resolve(UpdateUserService::class)->setParams()->handle();
+            $url_payment = $this->paymentGateway->payment($this->data);
+
+            return $url_payment;
+            // resolve(UpdateUserService::class)->setParams()->handle();
         } catch (Exception $e) {
             Log::info($e);
 

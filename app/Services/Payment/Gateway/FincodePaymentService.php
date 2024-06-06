@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class FincodePaymentService implements PaymentProcessInterface
 {
-    public function payment(int $amount)
+    public function payment($request)
     {
         try {
-            dump('Fincode Payment' . $amount);
+            dump('Fincode Payment' . $request);
         } catch (Exception $e) {
             Log::info($e);
 

@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class StripePaymentService implements PaymentProcessInterface
 {
-    public function payment(int $amount)
+    public function payment($request)
     {
         try {
-            dump('Stripe Payment' . $amount);
+            dump('Stripe Payment' . $request);
         } catch (Exception $e) {
             Log::info($e);
 

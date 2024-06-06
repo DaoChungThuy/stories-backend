@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class MomoPaymentService implements PaymentProcessInterface
 {
-    public function payment(int $amount)
+    public function payment($request)
     {
         try {
-            dump('MOMO Payment' . $amount);
+            dump('MOMO Payment' . $request);
         } catch (Exception $e) {
             Log::info($e);
 

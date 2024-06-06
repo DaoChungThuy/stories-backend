@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
-use App\Services\Payment\Gateway\FincodePaymentService;
+use App\Services\Payment\Gateway\VNPayPaymentService;
 use App\Services\Payment\PaymentProcessorService;
 use Illuminate\Http\Request;
 
@@ -11,11 +11,16 @@ class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
-        // $paymentGateway = new PaymentProcessorService(new MomoPaymentService());
-        $paymentGateway = new PaymentProcessorService(new FincodePaymentService());
-        // $paymentGateway = new PaymentProcessorService(new StripePaymentService());
-        $paymentGateway->setParams($request)->handle();
+        if ($request->gateway == 'vnpay') {
+            $paymentGateway = new PaymentProcessorService(new VNPayPaymentService());
+        }
 
-        return redirect()->route('users.index');
+        $payment = $paymentGateway->setParams($request)->handle();
+
+        if($payment){
+            return $this->responseSuccess([
+                'payment_url' => $payment
+            ]);
+        }
     }
 }
