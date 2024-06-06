@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -29,6 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'role',
+        'verification_token'
     ];
 
     /**
@@ -71,8 +73,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * get full url of image avatar
+     */
+    public function getAttributeImageURL()
+    {
+        return asset(Storage::get($this->avatar));
+    }
+
+    /**
      * Get the book liked for the user.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function bookLikes()
@@ -82,7 +92,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the authors for the user.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function authors()
@@ -92,7 +102,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the book followed for the user.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function bookFollows()
@@ -102,7 +112,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the chapter read for the user.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function userChapters()

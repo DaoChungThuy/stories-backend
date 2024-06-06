@@ -23,6 +23,10 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/send-email', [AuthController::class, 'sendEmail']);
+Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
+
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('data', [ServicePackageController::class, 'getData']);
     Route::post('create', [ServicePackageController::class, 'create']);
