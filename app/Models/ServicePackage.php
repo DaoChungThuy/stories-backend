@@ -20,4 +20,13 @@ class ServicePackage extends Model
         'duration',
         'type',
     ];
+
+    /**
+     * Get all of the user service packages for the service package
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userServicePackages()
+    {
+        return $this->hasMany(UserServicePackage::class);
+    }
 }

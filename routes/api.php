@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function () {
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('data', [ServicePackageController::class, 'getData']);
     Route::post('create', [ServicePackageController::class, 'create']);
+    Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
 });
 
 Route::group(['prefix' => 'user-service-packages'], function () {

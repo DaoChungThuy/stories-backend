@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ServicePackage\CreateServicePackageRequest;
 use App\Http\Requests\Api\ServicePackage\RegisterUserServiceRequest;
 use App\Services\Api\ServicePackage\CreateServicePackageService;
+use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
 use App\Services\Api\UserServicePackage\CreateUserServicePackageService;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ServicePackageController extends Controller
 {
+    const LIMIT_SERVICE_POPULAR = 5;
+
     /**
      * fetch service package list
      * @return \Illuminate\Http\JsonResponse
@@ -67,5 +70,22 @@ class ServicePackageController extends Controller
             'data' => $userService->getData()->data,
             'message' => $userService->getData()->message
         ], Response::HTTP_CREATED);
+    }
+
+    /**
+     * fetch service package list popular with limit
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDataPopular()
+    {
+        $servicePackage = resolve(GetServicePackageListPopularService::class)->setParams(self::LIMIT_SERVICE_POPULAR)->handle();
+
+        if ($servicePackage) {
+            return $this->responseSuccess([
+                'data' => $servicePackage
+            ]);
+        }
+
+        return $this->responseErrors(__('servicePackage.not_found'));
     }
 }

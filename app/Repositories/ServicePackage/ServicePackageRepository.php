@@ -10,6 +10,20 @@ class ServicePackageRepository extends BaseRepository implements ServicePackageR
 {
     public function __construct(ServicePackage $servicePackage)
     {
-       $this->model = $servicePackage;
+        $this->model = $servicePackage;
+    }
+
+    /**
+     * get service package popular with limit
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getServicePackagePopular($limit)
+    {
+        return $this->model
+            ->withCount('userServicePackages')
+            ->orderByDESC('user_service_packages_count')
+            ->limit($limit)
+            ->get();
     }
 }
