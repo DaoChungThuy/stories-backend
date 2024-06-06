@@ -2,158 +2,90 @@
 
 namespace App\Services\Crawl;
 
-use App\Models\Chapter;
+use App\Enums\StatusStory;
+use App\Enums\StoryType;
+use App\Interfaces\Book\BookRepositoryInterface;
+use App\Jobs\CrawlContentChapter;
 use App\Services\BaseService;
-use DOMElement;
+use App\Traits\UploadFileTrait;
 use GuzzleHttp\Client;
-use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 
 class CrawlDataService extends BaseService
 {
-    protected $client;
+    use UploadFileTrait;
 
-    public function __construct()
+    protected $client;
+    protected $bookRepository;
+
+    public function __construct(BookRepositoryInterface $bookRepository)
     {
         $this->client = new Client();
+        $this->bookRepository = $bookRepository;
     }
 
     public function handle()
     {
-        try {
-            $response = $this->client->get($this->data['url']);
+        $response = $this->client->get($this->data['url']);
 
-            if ($response->getStatusCode() === 200) {
-                $body = $response->getBody()->getContents();
-
-                $dom = new \DOMDocument();
-                @$dom->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
-
-                $xpath = new \DOMXPath($dom);
-
-                $queryAvata = $xpath->query(
-                    './/div[@class="info"]
-                    //div[@class="row info-content"]
-                    //div[@class="col-md-12 comic-intro m-b-0"]
-                    //div[@class="none-box m-b-30"]
-                    //div[@class="row"]
-                    //div[@class="col-sm-4 margin-bottom-15px"]
-                    //img'
-                );
-                $queryTitle = $xpath->query(
-                    './/div[@class="col-sm-8 comic-info"]
-                    //h2'
-                );
-                $queryAuhtorName = $xpath->query(
-                    './/div[@class="col-sm-8 comic-info"]
-                    //p
-                    //span'
-                );
-                $queryDescription = $xpath->query(
-                    './/div[@class="none-box m-b-30"]
-                    //div[@class="margin-bottom-15px intro-container"]
-                    //p'
-                );
-
-                $queryChapter = $xpath->query(
-                    './/div[@class="table-scroll"]
-                    //table
-                    //tbody
-                    //tr
-                    //td[2]
-                    //a[@class="text-capitalize"]'
-                );
-
-                $title = $queryTitle['0']->nodeValue;
-                $author_name = $queryAuhtorName['1']->nodeValue;
-                $chapters = [];
-                $descriptionText = '';
-
-                if ($queryChapter->length > 0) {
-                    for ($i = $queryChapter->length - 1; $i >= 0; $i--) {
-                        $chapters[] = $queryChapter[$i]->getAttribute('href');
-                    }
-                }
-
-                foreach ($queryDescription as $description) {
-                    $descriptionText .= $description->nodeValue . ' ';
-                }
-
-                $chapterContent = $this->getContentStory($chapters);
-
-                $avatar = $queryAvata['0']->getAttribute('src');
-
-                return $chapterContent;
-            } else {
-                Log::error('error: ' . json_encode($response));
-                return false;
-            }
-        } catch (Exception $e) {
-            Log::info($e);
-
+        if ($response->getStatusCode() != 200) {
+            Log::error(__('status.failed_load') . $response->getStatusCode());
             return false;
         }
-    }
-    public function getContentStory(array $url)
-    {
-        $data = [];
 
-        foreach ($url as $item) {
-            $response = $this->client->get($item);
+        $body = $response->getBody()->getContents();
+        $dom = new \DOMDocument();
+        @$dom->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
+        $xpath = new \DOMXPath($dom);
 
-            if ($response->getStatusCode() === 200) {
-                $body = $response->getBody()->getContents();
+        $queryAvatar = $xpath->query(file_get_contents(app_path('XpathQueries/avatar_xpath.txt')));
+        $queryTitle = $xpath->query(file_get_contents(app_path('XpathQueries/title_xpath.txt')));
+        $queryChapter = $xpath->query(file_get_contents(app_path('XpathQueries/chapter_xpath.txt')));
 
-                $dom = new \DOMDocument();
-                @$dom->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
+        $title = $queryTitle[0]->nodeValue;
+        $avatarUrl = $queryAvatar[0]->getAttribute('src');
+        $imageData = file_get_contents($avatarUrl);
 
-                $xpath = new \DOMXPath($dom);
+        if ($imageData === false) {
+            Log::error(__('status.failed_load_img'));
+            return false;
+        }
 
-                $queryContent = $xpath->query(
-                    './/div[@class="none-shadow"]//div[@id="view-chapter"]'
-                )->getIterator();
-                foreach ($xpath->query('.//div[@class="none-shadow"]//div[@id="view-chapter"]') as $node) {
-                    dd($xpath);
-                    $a = $this->lazyLoad($node);
-                    dd($a);
-                }
-                dd($dom->getElementsByTagName('.//div[@class="none-shadow"]//div[@id="view-chapter"]//img'));
-                dd($queryContent);
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'img');
+        file_put_contents($tempFilePath, $imageData);
 
-                foreach ($xpath->query(
-                    './/div[@class="none-shadow"]//div[@id="view-chapter"]'
-                ) as $est) {
-                    $est->nodeValue = "This is a {$est->tagName} tag.";
-                }
-            } else {
-                Log::error('error: ' . json_encode($response));
-                return false;
+        $uploadedFile = new UploadedFile(
+            $tempFilePath,
+            basename($avatarUrl),
+            mime_content_type($tempFilePath),
+            filesize($tempFilePath),
+            UPLOAD_ERR_OK
+        );
+
+        $data = [
+            'title' => $title,
+            'cover_image' => $this->uploadFile($uploadedFile),
+            'author_id' => $this->data['author_id'],
+            'genre_id' => $this->data['genre_id'],
+            'description' => $this->data['description'],
+            'package_type' => $this->data['package_type'],
+            'story_type' => StoryType::COMIC,
+            'status' => StatusStory::ACTIVE,
+        ];
+
+        $book = $this->bookRepository->create($data);
+
+        if ($queryChapter->length > 0) {
+            for ($i = $queryChapter->length - 1; $i >= 1; $i--) {
+                dispatch(new CrawlContentChapter(
+                    $queryChapter[$i]->getAttribute('href'),
+                    $book->id,
+                    $queryChapter->length - 1 - $i
+                ));
             }
         }
 
-        return $data;
-    }
-
-    /**
-     * @param DOMDocument $dom
-     * @param DOMElement $node
-     */
-    protected function lazyLoad(DOMElement $node)
-    {
-        if (!$node->hasAttribute('data-src')) {
-            // Set the data-src attribute.
-            $node->setAttribute('data-src', $node->getAttribute('src'));
-
-            // Set the src attribute to loading image.
-            $node->setAttribute('src', asset('images/loading.gif'));
-
-            // Merge the lazy load class into the class list.
-            $node->setAttribute('class', join(' ', [
-                $node->getAttribute('class'),
-                'lazy-load'
-            ]));
-
-            return $node;
-        }
+        return $book;
     }
 }

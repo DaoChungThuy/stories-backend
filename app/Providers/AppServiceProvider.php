@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Interfaces\Author\AuthorRepositoryInterface;
+use App\Interfaces\Book\BookRepositoryInterface;
 use App\Interfaces\Email\EmailServiceInterface;
 use App\Interfaces\User\UserRepositoryInterface;
 use App\Repositories\Author\AuthorRepository;
+use App\Repositories\Book\BookRepository;
 use App\Repositories\User\UserRepository;
 use App\Services\Email\EmailService;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(EmailServiceInterface::class, EmailService::class);
         $this->app->bind(AuthorRepositoryInterface::class, AuthorRepository::class);
+        $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
     }
 
     /**
