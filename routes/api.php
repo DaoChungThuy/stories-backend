@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Genre\GenreController;
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,10 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () {
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
+    });
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
 
 Route::resource('genres', GenreController::class);
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/send-email', [AuthController::class, 'sendEmail']);
+Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');

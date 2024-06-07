@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 trait UploadFileTrait
 {
-    public function uploadFile(UploadedFile $file, $type)
+    public function uploadFile(UploadedFile $file)
     {
-        $imageName = $type . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $path_name = 'image/' . $type . '/';
+        $imageName = 'author_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $path_name = 'image/';
 
         if (Storage::disk('public')->put($path_name . $imageName, file_get_contents($file->getRealPath()))) {
             return $imageName;
