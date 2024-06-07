@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\Api\Auth\LoginRequest;
+use App\Services\Auth\LogoutService;
 
 class AuthController extends Controller
 {
@@ -94,11 +95,11 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
-        if($user->email_verified_at == null) {
+        if ($user->email_verified_at == null) {
             return $this->responseErrors(__('auth.email_not_verified'), Response::HTTP_UNAUTHORIZED);
         }
 
-        if($user->deleted_at != null) {
+        if ($user->deleted_at != null) {
             return $this->responseErrors(__('auth.unauthorized'), Response::HTTP_UNAUTHORIZED);
         }
 
@@ -108,5 +109,30 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
+    }
+
+    /**
+     * Logout the user and invalidate the current JWT token.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        try {
+            $result = resolve(LogoutService::class)->handle();
+
+            if ($result) {
+                return $this->responseSuccess([
+                    'message' => __('auth.logout_success'),
+                ], Response::HTTP_OK);
+            }
+
+            return $this->responseErrors(__('auth.logout_fail'), Response::HTTP_UNAUTHORIZED);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
+            return $this->responseErrors(__('messages.error_server'));
+        }
     }
 }
