@@ -7,7 +7,7 @@ use App\Services\BaseService;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegisterService extends BaseService
+class RegisterPackageService extends BaseService
 {
     protected $userServiceRepository;
 
@@ -25,7 +25,7 @@ class RegisterService extends BaseService
             if ($existingServicePackage) {
                 return response()->json([
                     'message' => __('user.service_package.register_conflict')
-                ], Response::HTTP_FORBIDDEN);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $newUserService =  $this->userServiceRepository

@@ -8,7 +8,7 @@ use App\Http\Requests\Api\ServicePackage\RegisterUserServiceRequest;
 use App\Services\Api\ServicePackage\CreateServicePackageService;
 use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
-use App\Services\Api\UserServicePackage\RegisterService;
+use App\Services\Api\UserServicePackage\RegisterPackageService;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServicePackageController extends Controller
@@ -59,7 +59,7 @@ class ServicePackageController extends Controller
      */
     public function registerServicePackage(RegisterUserServiceRequest $request)
     {
-        $userService = resolve(RegisterService::class)->setParams($request->validated())->handle();
+        $userService = resolve(RegisterPackageService::class)->setParams($request->validated())->handle();
 
         if ($userService->getStatusCode() !== Response::HTTP_OK) {
             return $this->responseErrors($userService->getData()->message, $userService->getStatusCode());
