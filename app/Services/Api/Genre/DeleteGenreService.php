@@ -25,7 +25,6 @@ class DeleteGenreService extends BaseService
             return $this->genreRepository->delete($this->data['id']);
         } catch (Exception $e) {
             Log::info($e);
-            dd($e);
 
             return false;
         }
