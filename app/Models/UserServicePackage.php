@@ -22,4 +22,6 @@ class UserServicePackage extends Model
         'start_date',
         'status',
     ];
+
+    protected $table = 'user_service_package';
 }

@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServicePackage extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -21,4 +20,13 @@ class ServicePackage extends Model
         'duration',
         'type',
     ];
+
+    /**
+     * Get all of the user service packages for the service package
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userServicePackages()
+    {
+        return $this->hasMany(UserServicePackage::class);
+    }
 }
