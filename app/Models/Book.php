@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Book extends Model
 {
@@ -25,6 +27,20 @@ class Book extends Model
         'package_type',
         'story_type',
     ];
+
+    /**
+     * Get the URL for the avatar from Storage.
+     *
+     * This method returns the full URL of the avatar file stored in the "image" directory of the storage system.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function cover_image(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => asset(Storage::url('image/' . $value)),
+        );
+    }
 
     /**
      * Get the comments for the book.
