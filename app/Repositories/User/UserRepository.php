@@ -23,7 +23,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param string $token
      * @return bool
      */
-    public function vertifyEmail($token)
+    public function verifyEmail($token)
     {
         return $this->model->where('verification_token', $token)
             ->update([

@@ -21,7 +21,7 @@ class UserRegisterRequest extends BaseRequest
                 'regex:/^[a-zA-Z]+[a-zA-Z0-9\-]*@([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/ui',
                 'unique:users'
             ],
-            'password' => 'required|min:6|regex:/^[a-zA-Z]+[a-zA-Z0-9\-]*$/u',
+            'password' => 'required|min:8|regex:/^[a-zA-Z0-9][a-zA-Z0-9\-]*$/u',
             'full_name' => 'required|string',
             'avatar' => 'image|mimes:png,jpg,jpeg|max:2048'
         ];
@@ -39,8 +39,8 @@ class UserRegisterRequest extends BaseRequest
             'email.unique' => 'Email already exists.',
 
             'password.required' => 'Password is required.',
-            'password.min' => 'Password must be at least 6 characters.',
-            'password.regex' => 'Password must start with a letter. It cannot contain spaces or special characters.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.regex' => 'Password is not in correct format. It cannot contain spaces or special characters.',
 
             'full_name.required' => 'Full name is required.',
             'full_name.string' => 'Full name must be a string.',
