@@ -7,7 +7,7 @@ use App\Services\BaseService;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class CreateUserServicePackageService extends BaseService
+class RegisterPackageService extends BaseService
 {
     protected $userServiceRepository;
 
@@ -25,7 +25,7 @@ class CreateUserServicePackageService extends BaseService
             if ($existingServicePackage) {
                 return response()->json([
                     'message' => __('user.service_package.register_conflict')
-                ], Response::HTTP_CONFLICT);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $newUserService =  $this->userServiceRepository
@@ -38,13 +38,13 @@ class CreateUserServicePackageService extends BaseService
             return response()->json([
                 'data' => $newUserService,
                 'message' => __('user.service_package.register_successfully')
-            ], Response::HTTP_CREATED);
+            ], Response::HTTP_OK);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             
             return response()->json([
                 'message' => __('user.service_package.register_error')
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_FORBIDDEN);
         }
     }
 }

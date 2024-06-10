@@ -19,13 +19,13 @@ class UserServicePackageRepository extends BaseRepository implements UserService
      * Check if the user has registered for service package
      * @param $userId
      * @param $serviceId
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return true|false
      */
     public function checkUserService($userId, $serviceId)
     {
         return $this->model->where('user_id', $userId)
             ->where('service_package_id', $serviceId)
             ->where('status', str(UserServiceStatus::ACTIVE))
-            ->first();
+            ->exists();
     }
 }
