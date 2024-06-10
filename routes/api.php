@@ -28,15 +28,16 @@ Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 
 Route::group(['prefix' => 'service-package'], function () {
-    Route::get('data', [ServicePackageController::class, 'getData']);
-    Route::post('create', [ServicePackageController::class, 'create']);
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
+    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
+    Route::get('', [ServicePackageController::class, 'getData']);
+    Route::post('', [ServicePackageController::class, 'create']);
 });
 
 Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('create', [ServicePackageController::class, 'registerServicePackage']);
+    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
 });
 
 Route::group(['prefix' => 'payment'], function () {
-    Route::post('/', [PaymentController::class, 'payment']);
+    Route::post('', [PaymentController::class, 'payment']);
 });

@@ -20,7 +20,7 @@ class CreateUserServicePackageService extends BaseService
     {
         try {
             $existingServicePackage  = $this->userServiceRepository
-                ->checkUserService($this->data['user_id'], $this->data['service_package_id']);
+                ->checkUserService(auth()->user()->id, $this->data);
 
             if ($existingServicePackage) {
                 return response()->json([
@@ -29,7 +29,11 @@ class CreateUserServicePackageService extends BaseService
             }
 
             $newUserService =  $this->userServiceRepository
-                ->create([...$this->data, 'start_date' => now()]);
+                ->create([
+                    'user_id' => auth()->user()->id,
+                    'service_package_id' => $this->data,
+                    'start_date' => now()
+                ]);
 
             return response()->json([
                 'data' => $newUserService,
@@ -37,7 +41,7 @@ class CreateUserServicePackageService extends BaseService
             ], Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-
+            
             return response()->json([
                 'message' => __('user.service_package.register_error')
             ], Response::HTTP_INTERNAL_SERVER_ERROR);

@@ -13,9 +13,6 @@ class StripePaymentService implements PaymentProcessInterface
     public function payment($request)
     {
         try {
-            $request->validate([
-                'amount' => 'required|integer',
-            ]);
             Stripe::setApiKey(env('STRIPE_SECRET'));
             $session = Session::create([
                 'payment_method_types' => ['card'],
@@ -23,21 +20,21 @@ class StripePaymentService implements PaymentProcessInterface
                     'price_data' => [
                         'currency' => 'vnd',
                         'product_data' => [
-                            'name' => 'canh',
+                            'name' => $request->service['service_package_name'],
                         ],
-                        'unit_amount' => 20000,
+                        'unit_amount' => $request->service['price'],
                     ],
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => env('RETURN_URL'),
-                'cancel_url' => env('RETURN_URL'),
+                'success_url' => env('RETURN_URL_SUCCESS'),
+                'cancel_url' => env('RETURN_URL_ERROR'),
             ]);
-            dd($session->url);
-            dump('Stripe Payment');
+
+            return $session->url;
         } catch (Exception $e) {
             Log::info($e);
-            dd($e);
+            
             return false;
         }
     }

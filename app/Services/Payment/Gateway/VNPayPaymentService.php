@@ -11,16 +11,14 @@ class VNPayPaymentService implements PaymentProcessInterface
     public function payment($request)
     {
         try {
-
             date_default_timezone_set('Asia/Ho_Chi_Minh');
 
             $vnp_TmnCode = env('VNPAY_TMN_CODE');
             $vnp_HashSecret = env('VNPAY_SECRET_KEY');
             $vnp_Url = env('VNPAY_URL');
-            $vnp_Returnurl = env('RETURN_URL');
-
+            $vnp_Returnurl = env('RETURN_URL_SUCCESS');
             $vnp_TxnRef = uniqid();
-            $vnp_Amount = $request->input('amount');
+            $vnp_Amount = $request->amount;
             $vnp_Locale = 'vn';
             $vnp_BankCode = $request->bankCode ?? 'VNBANK';
             $vnp_IpAddr = $request->ip();
@@ -58,6 +56,7 @@ class VNPayPaymentService implements PaymentProcessInterface
             $query = rtrim($query, '&');
 
             $vnp_Url = $vnp_Url . "?" . $query;
+
             if (isset($vnp_HashSecret)) {
                 $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= '&vnp_SecureHashType=SHA512&vnp_SecureHash=' . $vnpSecureHash;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ServicePackage\CreateServicePackageRequest;
 use App\Http\Requests\Api\ServicePackage\RegisterUserServiceRequest;
 use App\Services\Api\ServicePackage\CreateServicePackageService;
+use App\Services\Api\ServicePackage\FindServicePackageById;
 use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
 use App\Services\Api\UserServicePackage\CreateUserServicePackageService;
@@ -15,6 +16,24 @@ use Symfony\Component\HttpFoundation\Response;
 class ServicePackageController extends Controller
 {
     const LIMIT_SERVICE_POPULAR = 5;
+
+    /**
+     * fetch service package by id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function findPackage($id)
+    {
+        $servicePackage = resolve(FindServicePackageById::class)->setParams($id)->handle();
+
+        if ($servicePackage) {
+            return $this->responseSuccess([
+                'data' => $servicePackage
+            ]);
+        }
+
+        return $this->responseErrors(__('servicePackage.not_found'));
+    }
 
     /**
      * fetch service package list
