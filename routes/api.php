@@ -39,5 +39,5 @@ Route::group(['prefix' => 'user-service-packages'], function () {
 });
 
 Route::prefix('admin')->group(function () {
-    Route::get('/crawl_data', [CrawlStoryController::class, 'crawl']);
+    Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
 });
