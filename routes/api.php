@@ -38,4 +38,6 @@ Route::group(['prefix' => 'user-service-packages'], function () {
     Route::post('', [ServicePackageController::class, 'registerServicePackage']);
 });
 
-Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
+Route::prefix('admin')->group(function () {
+    Route::get('/crawl_data', [CrawlStoryController::class, 'crawl']);
+});
