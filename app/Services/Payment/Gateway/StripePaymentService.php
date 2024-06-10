@@ -34,7 +34,7 @@ class StripePaymentService implements PaymentProcessInterface
             return $session->url;
         } catch (Exception $e) {
             Log::info($e);
-            
+
             return false;
         }
     }

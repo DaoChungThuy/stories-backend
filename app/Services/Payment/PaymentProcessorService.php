@@ -5,6 +5,7 @@ namespace App\Services\Payment;
 use App\Interfaces\Payment\PaymentProcessInterface;
 use App\Services\Api\ServicePackage\FindServicePackageById;
 use App\Services\Api\UserServicePackage\CreateUserServicePackageService;
+use App\Services\Api\UserServicePackage\RegisterPackageService;
 use App\Services\BaseService;
 use App\Services\User\UpdateUserService;
 use Exception;
@@ -33,8 +34,8 @@ class PaymentProcessorService extends BaseService
                 $url_payment = $this->paymentGateway->payment($this->data);
 
                 if ($url_payment) {
-                    $userService = resolve(CreateUserServicePackageService::class)->setParams($this->data['id'])->handle();
-                    if ($userService->getStatusCode() != Response::HTTP_CREATED) return $userService;
+                    $userService = resolve(RegisterPackageService::class)->setParams($this->data['id'])->handle();
+                    if ($userService->getStatusCode() != Response::HTTP_OK) return $userService;
                 }
 
                 return response()->json([

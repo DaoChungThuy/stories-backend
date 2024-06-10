@@ -49,7 +49,7 @@ class AuthController extends Controller
         $check = resolve(VertifyEmailUserService::class)->setParams($token)->handle();
 
         if ($check) {
-            return redirect(env('VUE_URL'));
+            return redirect(env('VUE_URL_LOGIN'));
         }
 
         return $this->responseErrors(__('messages.error_server'));
