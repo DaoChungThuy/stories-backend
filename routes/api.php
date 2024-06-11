@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
-use App\Http\Controllers\Crawl\CrawlStoryController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,8 +35,4 @@ Route::group(['prefix' => 'service-package'], function () {
 
 Route::group(['prefix' => 'user-service-packages'], function () {
     Route::post('', [ServicePackageController::class, 'registerServicePackage']);
-});
-
-Route::prefix('admin')->group(function () {
-    Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
 });
