@@ -31,4 +31,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'email_verified_at' => now()
             ]);
     }
+
+    public function getListAuthors($id)
+    {
+        return $this->model->findOrFail($id)->authors()->get();
+    }
 }

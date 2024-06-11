@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\StoryManagement\AdminStoryManagementController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Crawl\CrawlStoryController;
@@ -39,5 +41,6 @@ Route::group(['prefix' => 'user-service-packages'], function () {
 });
 
 Route::prefix('admin')->group(function () {
-    Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
+    Route::post('/crawl_data', [AdminStoryManagementController::class, 'crawlStory']);
+    Route::get('/list_author', [AdminController::class, 'getListAuthors']);
 });
