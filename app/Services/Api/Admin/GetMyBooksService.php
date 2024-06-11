@@ -7,7 +7,7 @@ use App\Services\BaseService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class GetListAuthorsService extends BaseService
+class GetMyBooksService extends BaseService
 {
     protected $userRepository;
 
@@ -19,9 +19,9 @@ class GetListAuthorsService extends BaseService
     public function handle()
     {
         try {
-            $authors =  $this->userRepository->getListAuthors(auth()->user()->id);
+            $book = $this->userRepository->getMyBooks(auth()->user()->id);
 
-            return $authors;
+            return $book;
         } catch (Exception $e) {
             Log::info($e);
 

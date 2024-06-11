@@ -36,4 +36,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->findOrFail($id)->authors()->get();
     }
+
+    public function getMyBooks($id)
+    {
+        return $this->model->findOrFail($id)->authors()
+            ->join('books', 'authors.id', '=', 'books.author_id')
+            ->select('books.*')
+            ->orderByDesc('created_at');
+    }
 }

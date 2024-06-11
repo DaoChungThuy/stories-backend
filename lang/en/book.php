@@ -17,4 +17,8 @@ return [
     'chapter' => 'Chapter: ',
     'create_falsed' => 'Create failed.',
     'create_success' => 'Create success.',
+    'get_falsed' => 'Get failed.',
+    'get_success' => 'Get success.',
+    'delete_falsed' => 'Delete failed.',
+    'delete_success' => 'Delete success.',
 ];

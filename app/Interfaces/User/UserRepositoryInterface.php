@@ -12,5 +12,5 @@ interface UserRepositoryInterface extends CrudRepositoryInterface
 
     public function getListAuthors($id);
 
-    public function getMyStorys($id);
+    public function getMyBooks($id);
 }
