@@ -14,6 +14,4 @@ use App\Http\Controllers\Crawl\CrawlStoryController;
 |
 */
 
-Route::prefix('admin')->group(function () {
-    Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
-});
+Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
