@@ -20,7 +20,7 @@ class RegisterPackageService extends BaseService
     {
         try {
             $existingServicePackage  = $this->userServiceRepository
-                ->checkUserService(auth()->user()->id, $this->data);
+                ->checkUserService($this->data['user_id'], $this->data['service_id']);
 
             if ($existingServicePackage) {
                 return response()->json([
@@ -30,8 +30,8 @@ class RegisterPackageService extends BaseService
 
             $newUserService =  $this->userServiceRepository
                 ->create([
-                    'user_id' => auth()->user()->id,
-                    'service_package_id' => $this->data,
+                    'user_id' => $this->data['user_id'],
+                    'service_package_id' => $this->data['service_id'],
                     'start_date' => now()
                 ]);
 
@@ -41,7 +41,7 @@ class RegisterPackageService extends BaseService
             ], Response::HTTP_OK);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            
+
             return response()->json([
                 'message' => __('user.service_package.register_error')
             ], Response::HTTP_FORBIDDEN);

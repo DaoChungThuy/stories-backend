@@ -16,8 +16,14 @@ class VNPayPaymentService implements PaymentProcessInterface
             $vnp_TmnCode = env('VNPAY_TMN_CODE');
             $vnp_HashSecret = env('VNPAY_SECRET_KEY');
             $vnp_Url = env('VNPAY_URL');
-            $vnp_Returnurl = env('RETURN_URL_SUCCESS');
+            // $vnp_Returnurl = env('RETURN_URL_SUCCESS');
+
             $vnp_TxnRef = uniqid();
+            $vnp_Returnurl = route('registerService', [
+                'serviceId' => $request->service['id'],
+                'userId' => auth()->user()->id,
+                'sessionId' => $vnp_TxnRef,
+            ]);
             $vnp_Amount = $request->amount;
             $vnp_Locale = 'vn';
             $vnp_BankCode = $request->bankCode ?? 'VNBANK';

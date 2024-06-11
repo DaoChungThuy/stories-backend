@@ -10,6 +10,7 @@ use App\Services\Api\ServicePackage\FindServicePackageById;
 use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
 use App\Services\Api\UserServicePackage\RegisterPackageService;
+use App\Services\Payment\Refund\StripeRefundService;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServicePackageController extends Controller
@@ -74,20 +75,24 @@ class ServicePackageController extends Controller
 
     /**
      * register service package for user
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $serviceId
+     * @param int $userId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function registerServicePackage(RegisterUserServiceRequest $request)
+    public function registerServicePackage($sessionId, $serviceId, $userId)
     {
-        $userService = resolve(RegisterPackageService::class)->setParams($request->validated())->handle();
+        $userService = resolve(RegisterPackageService::class)->setParams([
+            'service_id' => $serviceId,
+            'user_id' => $userId
+        ])->handle();
 
         if ($userService->getStatusCode() !== Response::HTTP_OK) {
-            return $this->responseErrors($userService->getData()->message, $userService->getStatusCode());
+            // resolve(StripeRefundService::class)->StripeRefund($sessionId);
+
+            return redirect(env('RETURN_URL_ERROR'));
         }
 
-        return $this->responseSuccess([
-            'data' => $userService->getData()->data,
-            'message' => $userService->getData()->message
-        ]);
+        return redirect(env('RETURN_URL_SUCCESS'));
     }
 
     /**

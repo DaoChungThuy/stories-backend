@@ -33,10 +33,7 @@ class PaymentProcessorService extends BaseService
                 $this->data['service'] = $service;
                 $url_payment = $this->paymentGateway->payment($this->data);
 
-                if ($url_payment) {
-                    $userService = resolve(RegisterPackageService::class)->setParams($this->data['id'])->handle();
-                    if ($userService->getStatusCode() != Response::HTTP_OK) return $userService;
-                }
+                if (!$url_payment) return $this->errorResponse();
 
                 return response()->json([
                     'payment_url' => $url_payment

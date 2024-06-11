@@ -14,6 +14,14 @@ class StripePaymentService implements PaymentProcessInterface
     {
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $baseSuccessUrl = url('api/user-service-packages/{sessionId}/{serviceId}/{userId}');
+            $successUrl = str_replace(
+                ['{sessionId}', '{serviceId}', '{userId}'],
+                ['{CHECKOUT_SESSION_ID}', $request->service['id'], auth()->user()->id],
+                $baseSuccessUrl
+            );
+
             $session = Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
@@ -27,7 +35,7 @@ class StripePaymentService implements PaymentProcessInterface
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => env('RETURN_URL_SUCCESS'),
+                'success_url' => $successUrl,
                 'cancel_url' => env('RETURN_URL_ERROR'),
             ]);
 

@@ -35,7 +35,7 @@ Route::group(['prefix' => 'service-package'], function () {
 });
 
 Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+    Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
 });
 
 Route::group(['prefix' => 'payment'], function () {
