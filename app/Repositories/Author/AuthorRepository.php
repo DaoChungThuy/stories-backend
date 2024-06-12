@@ -32,4 +32,14 @@ class AuthorRepository extends BaseRepository implements AuthorRepositoryInterfa
     {
         return $this->model->where('create_by_user_id', $userId)->first();
     }
+
+    /**
+     * Get the chapters for the author.
+     * @param $authorId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getChaptersPosted($authorId)
+    {
+        return $this->model->with('chapters')->find($authorId)->chapters;
+    }
 }
