@@ -42,4 +42,9 @@ class AuthorRepository extends BaseRepository implements AuthorRepositoryInterfa
     {
         return $this->model->with('chapters')->find($authorId)->chapters;
     }
+
+    public function getFollowers($authorId)
+    {
+        return $this->model->with('followers')->find($authorId)->followers->count();
+    }
 }

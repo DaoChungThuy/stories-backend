@@ -41,4 +41,5 @@ Route::group(['prefix' => 'user-service-packages'], function () {
 Route::group(['prefix' => 'authors'], function () {
     Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
     Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
+    Route::get('/follower', [AuthorController::class, 'getFollowers']);
 });
