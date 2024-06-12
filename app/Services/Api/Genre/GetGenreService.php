@@ -3,13 +3,14 @@
 namespace App\Services\Api\Genre;
 
 use App\Interfaces\Genre\GenreRepositoryInterface;
+use App\Services\BaseService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 /**
  * Class GetGenreService.
  */
-class GetGenreService
+class GetGenreService extends BaseService
 {
     protected $genreRepository;
 
