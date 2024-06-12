@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\AdminController;
-use App\Http\Controllers\Api\Admin\BookManagement\AdminBookManagementController;
+use App\Http\Controllers\Api\Admin\AuthorManagement\AdminAuthorController;
+use App\Http\Controllers\Api\Admin\BookManagement\AdminBookController;
+use App\Http\Controllers\Api\Admin\GenreManagement\AdminGenreController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Crawl\CrawlStoryController;
 
@@ -17,6 +18,12 @@ use App\Http\Controllers\Crawl\CrawlStoryController;
 */
 
 Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
-Route::post('/crawl_book', [AdminBookManagementController::class, 'crawlBooks']);
-Route::get('/list_author', [AdminController::class, 'getListAuthors']);
-Route::get('/my_books', [AdminBookManagementController::class, 'getMyBooks']);
+Route::post('/crawl_book', [AdminBookController::class, 'crawlBooks']);
+Route::delete('/delete_book/{book_id}', [AdminBookController::class, 'deleteBook']);
+Route::get('/my_books', [AdminBookController::class, 'getMyBooks']);
+Route::get('/book/{book_id}', [AdminBookController::class, 'getBook']);
+Route::put('/update_book/{book_id}', [AdminBookController::class, 'updateBook']);
+
+Route::get('/list_genre', [AdminGenreController::class, 'index']);
+
+Route::get('/list_author', [AdminAuthorController::class, 'getListAuthors']);

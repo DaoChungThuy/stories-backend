@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Api\Admin\BookManagement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Crawl\CrawlBookRequest;
+use App\Http\Requests\Api\Book\UpdateBookRequest;
 use App\Http\Resources\Api\Book\BasicBookResource;
 use App\Http\Resources\Api\Book\BookResource;
-use App\Models\Book;
 use App\Services\Api\Admin\DeleteBookService;
+use App\Services\Api\Admin\FindBookByIdService;
 use App\Services\Api\Admin\GetMyBooksService;
+use App\Services\Api\Admin\UpdateBookService;
 use App\Services\Crawl\CrawlDataService;
 use Illuminate\Http\Request;
 
-class AdminBookManagementController extends Controller
+class AdminBookController extends Controller
 {
     public function crawlBooks(CrawlBookRequest $request)
     {
@@ -42,9 +44,9 @@ class AdminBookManagementController extends Controller
         ]);
     }
 
-    public function deleteBook($id)
+    public function deleteBook($book_id)
     {
-        $book = resolve(DeleteBookService::class)->setParams($id)->handle();
+        $book = resolve(DeleteBookService::class)->setParams($book_id)->handle();
 
         if (!$book) {
             return $this->responseErrors(__('book.delete_falsed'));
@@ -52,6 +54,35 @@ class AdminBookManagementController extends Controller
 
         return $this->responseSuccess([
             'message' => __('book.delete_success'),
+        ]);
+    }
+
+    public function updateBook(UpdateBookRequest $updateBookRequest, $book_id)
+    {
+        $data = array_merge($updateBookRequest->validated(), ['book_id' => $book_id]);
+        $book = resolve(UpdateBookService::class)->setParams($data)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.update_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.update_success'),
+            'data' => new BookResource($book),
+        ]);
+    }
+
+    public function getBook($book_id)
+    {
+        $book = resolve(FindBookByIdService::class)->setParams($book_id)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => new BasicBookResource($book),
         ]);
     }
 }

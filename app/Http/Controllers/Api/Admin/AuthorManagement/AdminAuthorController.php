@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api\Admin\AuthorManagement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Author\AuthorResource;
 use App\Services\Api\Admin\GetListAuthorsService;
 
-class AdminController extends Controller
+class AdminAuthorController extends Controller
 {
     public function getListAuthors()
     {

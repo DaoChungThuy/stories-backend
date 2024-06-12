@@ -41,6 +41,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->findOrFail($id)->authors()
             ->join('books', 'authors.id', '=', 'books.author_id')
+            ->whereNull('books.deleted_at')
             ->select('books.*')
             ->orderByDesc('created_at');
     }

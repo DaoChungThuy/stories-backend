@@ -39,8 +39,3 @@ Route::group(['prefix' => 'service-package'], function () {
 Route::group(['prefix' => 'user-service-packages'], function () {
     Route::post('', [ServicePackageController::class, 'registerServicePackage']);
 });
-
-Route::prefix('admin')->group(function () {
-    Route::post('/crawl_data', [AdminStoryManagementController::class, 'crawlStory']);
-    Route::get('/list_author', [AdminController::class, 'getListAuthors']);
-});
