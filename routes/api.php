@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -35,4 +36,8 @@ Route::group(['prefix' => 'service-package'], function () {
 
 Route::group(['prefix' => 'user-service-packages'], function () {
     Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+});
+
+Route::group(['prefix' => 'authors'], function () {
+    Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
 });
