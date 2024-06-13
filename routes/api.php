@@ -23,13 +23,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
         Route::post('logout', [AuthController::class, 'logout']);
     });
+    Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
-
-Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
 
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('', [ServicePackageController::class, 'getData']);

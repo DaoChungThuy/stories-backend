@@ -27,7 +27,7 @@ class GenerateDescBookService
 
         try {
             $response = Http::retry(3, 100)
-                ->timeout(10)
+                ->timeout(30)
                 ->withHeaders(['Content-Type' => 'application/json'])
                 ->post($url, $data);
 
