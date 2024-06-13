@@ -11,6 +11,7 @@ use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
 use App\Services\Api\UserServicePackage\RegisterPackageService;
 use App\Services\Payment\Refund\StripeRefundService;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServicePackageController extends Controller
@@ -88,8 +89,9 @@ class ServicePackageController extends Controller
 
         if ($userService->getStatusCode() !== Response::HTTP_OK) {
             // resolve(StripeRefundService::class)->StripeRefund($sessionId);
+            Log::error($userService->getData()->message);
 
-            return redirect(env('RETURN_URL_ERROR'));
+            return redirect(env('RETURN_URL_ERROR')  . '&message=' . $userService->getData()->message);
         }
 
         return redirect(env('RETURN_URL_SUCCESS'));
