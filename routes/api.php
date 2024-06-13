@@ -21,11 +21,12 @@ Route::middleware('auth:api')->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
     });
+    Route::group(['prefix' => 'admin'], function () {
+        Route::resource('genres', GenreController::class);
+    });
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
-
-Route::resource('genres', GenreController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
