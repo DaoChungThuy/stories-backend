@@ -21,9 +21,22 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
+        Route::post('logout', [AuthController::class, 'logout']);
     });
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
+
+Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
+
+Route::group(['prefix' => 'service-package'], function () {
+    Route::get('', [ServicePackageController::class, 'getData']);
+    Route::post('', [ServicePackageController::class, 'create']);
+    Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
+});
+
+Route::group(['prefix' => 'user-service-packages'], function () {
+    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+});

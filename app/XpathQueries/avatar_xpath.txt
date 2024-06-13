@@ -1,1 +1,0 @@
-.//article[@id="item-detail"]//div[@class="detail-info"]//div[@class="row"]//div[@class="col-xs-4 col-image"]//img

@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Chapter;
 use App\Models\ChapterImage;
-use App\Traits\UploadFileTrait;
-use GuzzleHttp\Client;
+use App\Traits\UploadFileImageTrait;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,25 +15,27 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\UploadedFile;
 use Exception;
 
-class CrawlContentChapter implements ShouldQueue
+class CrawlContentChapterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    use UploadFileTrait;
+    use UploadFileImageTrait;
 
     protected $url;
     protected $bookId;
     protected $chapterNumber;
+    protected $bookTitle;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($url, $bookId, $chapterNumber)
+    public function __construct($url, $bookId, $chapterNumber, $bookTitle)
     {
         $this->url = $url;
         $this->bookId = $bookId;
         $this->chapterNumber = $chapterNumber;
+        $this->bookTitle = $bookTitle;
     }
 
     /**
@@ -43,22 +45,19 @@ class CrawlContentChapter implements ShouldQueue
      */
     public function handle()
     {
-        $client = new Client();
-
         try {
-            $response = $client->get($this->url);
-
+            $response = Http::get($this->url);
             $body = $response->getBody()->getContents();
             $dom = new \DOMDocument();
             @$dom->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
             $xpath = new \DOMXPath($dom);
 
-            $queryContent = $xpath->query(file_get_contents(app_path('XpathQueries/content_xpath.txt')));
+            $queryContent = $xpath->query(config('xpaths')['nettruyenfull']['content_xpath']);
 
             $chapterData = [
                 'book_id' => $this->bookId,
                 'chapter_number' => $this->chapterNumber,
-                'chapter_title' => __('book.chapter') . $this->chapterNumber,
+                'chapter_title' =>  $this->bookTitle . ' - ' . __('book.chapter') . $this->chapterNumber,
                 'chapter_content' => __('book.comic_style'),
             ];
 
@@ -66,35 +65,26 @@ class CrawlContentChapter implements ShouldQueue
 
             if ($queryContent->length > 0) {
                 for ($i = 0; $i < $queryContent->length - 2; $i++) {
-                    $imgUrl = $queryContent[$i]->getAttribute('data-original');
-                    $imageData = file_get_contents($imgUrl);
+                    $response = Http::retry(3, 100)->get($queryContent[$i]->getAttribute('data-original'));
 
-                    if ($imageData === false) {
+                    if ($response->failed() || !str_starts_with($response->header('Content-Type'), 'image')) {
                         continue;
                     }
 
-                    $tempFilePath = tempnam(sys_get_temp_dir(), 'img');
-                    file_put_contents($tempFilePath, $imageData);
+                    $tempFile = tempnam(sys_get_temp_dir(), 'temp');
+                    file_put_contents($tempFile, $response->body());
 
-                    $uploadedFile = new UploadedFile(
-                        $tempFilePath,
-                        basename($imgUrl),
-                        mime_content_type($tempFilePath),
-                        filesize($tempFilePath),
-                        UPLOAD_ERR_OK
-                    );
-
-                    $uploadedImageUrl = $this->uploadFile($uploadedFile);
+                    $file = new UploadedFile($tempFile, time() . '_cover_image.jpg');
 
                     $chapterImageData = [
                         'chapter_id' => $chapter->id,
-                        'url' => $uploadedImageUrl,
+                        'url' => $this->uploadFileImage($file, 'img_content_story'),
                         'image_number' => $i,
                     ];
 
                     ChapterImage::create($chapterImageData);
 
-                    unlink($tempFilePath);
+                    unlink($tempFile);
                 }
             }
         } catch (Exception $e) {
