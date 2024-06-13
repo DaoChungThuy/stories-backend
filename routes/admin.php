@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\Admin\AuthorManagement\AdminAuthorController;
 use App\Http\Controllers\Api\Admin\BookManagement\AdminBookController;
 use App\Http\Controllers\Api\Admin\GenreManagement\AdminGenreController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Crawl\CrawlStoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +16,6 @@ use App\Http\Controllers\Crawl\CrawlStoryController;
 |
 */
 
-Route::post('/crawl_data', [CrawlStoryController::class, 'crawl']);
 Route::post('/crawl_book', [AdminBookController::class, 'crawlBooks']);
 Route::delete('/delete_book/{book_id}', [AdminBookController::class, 'deleteBook']);
 Route::get('/my_books', [AdminBookController::class, 'getMyBooks']);
