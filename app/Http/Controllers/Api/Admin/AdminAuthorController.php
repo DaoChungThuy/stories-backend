@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\AuthorManagement;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\Author\AuthorResource;
-use App\Services\Api\Admin\GetListAuthorsService;
+use App\Services\Api\Admin\Author\GetAuthorByAdminService;
 
 class AdminAuthorController extends Controller
 {
     public function getListAuthors()
     {
-        $authors = resolve(GetListAuthorsService::class)->handle();
+        $authors = resolve(GetAuthorByAdminService::class)->handle();
 
         if (!$authors) {
             return $this->responseErrors(__('author.get_failed'));

@@ -31,18 +31,4 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 'email_verified_at' => now()
             ]);
     }
-
-    public function getListAuthors($id)
-    {
-        return $this->model->findOrFail($id)->authors()->get();
-    }
-
-    public function getMyBooks($id)
-    {
-        return $this->model->findOrFail($id)->authors()
-            ->join('books', 'authors.id', '=', 'books.author_id')
-            ->whereNull('books.deleted_at')
-            ->select('books.*')
-            ->orderByDesc('created_at');
-    }
 }

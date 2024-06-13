@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api\Admin;
+namespace App\Services\Api\Admin\Book;
 
 use App\Interfaces\Book\BookRepositoryInterface;
 use App\Services\BaseService;
@@ -8,7 +8,7 @@ use App\Traits\UploadFileImageTrait;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class FindBookByIdService extends BaseService
+class UpdateBookService extends BaseService
 {
     use UploadFileImageTrait;
 
@@ -22,7 +22,11 @@ class FindBookByIdService extends BaseService
     public function handle()
     {
         try {
-            $book =  $this->bookRepository->find($this->data);
+            if (!empty($this->data['cover_image'])) {
+                $this->data['cover_image'] = $this->uploadFileImage($this->data['cover_image'], 'cover_image_story');
+            }
+
+            $book =  $this->bookRepository->update($this->data, $this->data['book_id']);
 
             return $book;
         } catch (Exception $e) {

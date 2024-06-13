@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api\Admin;
+namespace App\Services\Api\Admin\Book;
 
 use App\Interfaces\Book\BookRepositoryInterface;
 use App\Services\BaseService;

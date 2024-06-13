@@ -12,4 +12,11 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         $this->model = $book;
     }
+
+    public function getMyBooks($userId)
+    {
+        return $this->model->whereHas('author', function ($author) use ($userId) {
+            $author->where('id', $userId);
+        })->dd()->orderByDesc('created_at');
+    }
 }

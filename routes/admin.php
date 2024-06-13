@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\AuthorManagement\AdminAuthorController;
-use App\Http\Controllers\Api\Admin\BookManagement\AdminBookController;
-use App\Http\Controllers\Api\Admin\GenreManagement\AdminGenreController;
+use App\Http\Controllers\Api\Admin\AdminAuthorController;
+use App\Http\Controllers\Api\Admin\AdminBookController;
+use App\Http\Controllers\Api\Admin\AdminGenreController;
 use Illuminate\Support\Facades\Route;
 
 /*

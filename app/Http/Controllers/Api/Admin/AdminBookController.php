@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\BookManagement;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Crawl\CrawlBookRequest;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
 use App\Http\Resources\Api\Book\BasicBookResource;
 use App\Http\Resources\Api\Book\BookResource;
-use App\Services\Api\Admin\DeleteBookService;
-use App\Services\Api\Admin\FindBookByIdService;
-use App\Services\Api\Admin\GetMyBooksService;
-use App\Services\Api\Admin\UpdateBookService;
+use App\Services\Api\Admin\Book\DeleteBookService;
+use App\Services\Api\Admin\Book\FindBookByIdService;
+use App\Services\Api\Admin\Book\GetMyBooksService;
+use App\Services\Api\Admin\Book\UpdateBookService;
 use App\Services\Crawl\CrawlDataService;
 use Illuminate\Http\Request;
 
