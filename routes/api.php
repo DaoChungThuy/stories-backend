@@ -34,12 +34,14 @@ Route::group(['prefix' => 'service-package'], function () {
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
 });
 
-Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
-});
+Route::middleware('checkLogin')->group(function () {
+    Route::group(['prefix' => 'user-service-packages'], function () {
+        Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+    });
 
-Route::group(['prefix' => 'authors'], function () {
-    Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
-    Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
-    Route::get('/follower', [AuthorController::class, 'getFollowers']);
+    Route::group(['prefix' => 'authors'], function () {
+        Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+        Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
+        Route::get('/follower', [AuthorController::class, 'getFollowers']);
+    });
 });
