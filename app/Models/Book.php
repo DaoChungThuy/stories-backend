@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Book extends Model
 {
@@ -27,8 +28,24 @@ class Book extends Model
     ];
 
     /**
+     * asset url for cover image
+     */
+    public function getCoverImageAttribute($value)
+    {
+        return asset(Storage::url($value));
+    }
+
+    /**
+     * Get full URL of cover image
+     */
+    public function getAttributeImageURL()
+    {
+        return $this->cover_image; 
+    }
+
+    /**
      * Get the comments for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments()
@@ -38,7 +55,7 @@ class Book extends Model
 
     /**
      * Get the likes for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function bookLikes()
@@ -48,7 +65,7 @@ class Book extends Model
 
     /**
      * Get the genre for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function genre()
@@ -58,7 +75,7 @@ class Book extends Model
 
     /**
      * Get the chapters for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function chapters()
@@ -68,7 +85,7 @@ class Book extends Model
 
     /**
      * Get the follower for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function followers()
@@ -78,7 +95,7 @@ class Book extends Model
 
     /**
      * Get the author for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author()
