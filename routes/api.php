@@ -33,7 +33,7 @@ Route::group(['prefix' => 'service-package'], function () {
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
     Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
     Route::get('', [ServicePackageController::class, 'getData']);
-    Route::post('', [ServicePackageController::class, 'create']);
+    Route::post('', [ServicePackageController::class, 'create'])->middleware('checkLogin');
 });
 
 Route::middleware('checkLogin')->group(function () {
