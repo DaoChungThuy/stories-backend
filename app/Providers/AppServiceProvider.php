@@ -9,7 +9,6 @@ use App\Interfaces\Genre\GenreRepositoryInterface;
 use App\Interfaces\User\UserRepositoryInterface;
 use App\Repositories\Genre\GenreRepository;
 use App\Interfaces\ServicePackage\ServicePackageRepositoryInterface;
-use App\Interfaces\User\UserRepositoryInterface;
 use App\Interfaces\UserServicePackage\UserServicePackageRepositoryInterFace;
 use App\Repositories\Author\AuthorRepository;
 use App\Repositories\Book\BookRepository;
