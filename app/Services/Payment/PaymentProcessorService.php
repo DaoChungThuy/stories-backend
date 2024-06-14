@@ -4,10 +4,7 @@ namespace App\Services\Payment;
 
 use App\Interfaces\Payment\PaymentProcessInterface;
 use App\Services\Api\ServicePackage\FindServicePackageById;
-use App\Services\Api\UserServicePackage\CreateUserServicePackageService;
-use App\Services\Api\UserServicePackage\RegisterPackageService;
 use App\Services\BaseService;
-use App\Services\User\UpdateUserService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 class PaymentProcessorService extends BaseService
 {
     protected $paymentGateway;
-    protected $updateUserService;
 
     public function __construct(PaymentProcessInterface $paymentGateway)
     {
@@ -31,12 +27,12 @@ class PaymentProcessorService extends BaseService
 
             if ($service) {
                 $this->data['service'] = $service;
-                $url_payment = $this->paymentGateway->payment($this->data);
+                $urlPayment = $this->paymentGateway->payment($this->data);
 
-                if (!$url_payment) return $this->errorResponse();
+                if (!$urlPayment) return $this->errorResponse();
 
                 return response()->json([
-                    'payment_url' => $url_payment
+                    'payment_url' => $urlPayment
                 ], Response::HTTP_OK);
             }
         } catch (Exception $e) {

@@ -13,40 +13,39 @@ class VNPayPaymentService implements PaymentProcessInterface
         try {
             date_default_timezone_set('Asia/Ho_Chi_Minh');
 
-            $vnp_TmnCode = env('VNPAY_TMN_CODE');
-            $vnp_HashSecret = env('VNPAY_SECRET_KEY');
-            $vnp_Url = env('VNPAY_URL');
-            // $vnp_Returnurl = env('RETURN_URL_SUCCESS');
+            $vnpTmnCode = env('VNPAY_TMN_CODE');
+            $vnpHashSecret = env('VNPAY_SECRET_KEY');
+            $vnpUrl = env('VNPAY_URL');
 
-            $vnp_TxnRef = uniqid();
-            $vnp_Returnurl = route('registerService', [
+            $vnpTxnRef = uniqid();
+            $vnpReturnurl = route('registerService', [
                 'serviceId' => $request->service['id'],
                 'userId' => auth()->user()->id,
-                'sessionId' => $vnp_TxnRef,
+                'sessionId' => $vnpTxnRef,
             ]);
-            $vnp_Amount = $request->amount;
-            $vnp_Locale = 'vn';
-            $vnp_BankCode = $request->bankCode ?? 'VNBANK';
-            $vnp_IpAddr = $request->ip();
+            $vnpAmount = $request->service['price'];
+            $vnpLocale = 'vn';
+            $vnpBankCode = $request->bankCode ?? 'VNBANK';
+            $vnpIpAddr = $request->ip();
 
             $startTime = date('YmdHis');
             $expire = date('YmdHis', strtotime('+15 minutes'));
 
             $inputData = array(
                 "vnp_Version" => "2.1.0",
-                "vnp_TmnCode" => $vnp_TmnCode,
-                "vnp_Amount" => $vnp_Amount * 100,
+                "vnp_TmnCode" => $vnpTmnCode,
+                "vnp_Amount" => $vnpAmount * 100,
                 "vnp_Command" => "pay",
                 "vnp_CreateDate" => $startTime,
                 "vnp_CurrCode" => "VND",
-                "vnp_IpAddr" => $vnp_IpAddr,
-                "vnp_Locale" => $vnp_Locale,
-                "vnp_OrderInfo" => "Thanh toan GD:" . $vnp_TxnRef,
+                "vnp_IpAddr" => $vnpIpAddr,
+                "vnp_Locale" => $vnpLocale,
+                "vnp_OrderInfo" => "Thanh toan GD:" . $vnpTxnRef,
                 "vnp_OrderType" => "other",
-                "vnp_ReturnUrl" => $vnp_Returnurl,
-                "vnp_TxnRef" => $vnp_TxnRef,
+                "vnp_ReturnUrl" => $vnpReturnurl,
+                "vnp_TxnRef" => $vnpTxnRef,
                 "vnp_ExpireDate" => $expire,
-                "vnp_BankCode" => $vnp_BankCode,
+                "vnp_BankCode" => $vnpBankCode,
             );
 
             ksort($inputData);
@@ -61,14 +60,14 @@ class VNPayPaymentService implements PaymentProcessInterface
             $hashdata = ltrim($hashdata, '&');
             $query = rtrim($query, '&');
 
-            $vnp_Url = $vnp_Url . "?" . $query;
+            $vnpUrl = $vnpUrl . "?" . $query;
 
-            if (isset($vnp_HashSecret)) {
-                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
-                $vnp_Url .= '&vnp_SecureHashType=SHA512&vnp_SecureHash=' . $vnpSecureHash;
+            if (isset($vnpHashSecret)) {
+                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnpHashSecret);
+                $vnpUrl .= '&vnp_SecureHashType=SHA512&vnp_SecureHash=' . $vnpSecureHash;
             }
 
-            return $vnp_Url;
+            return $vnpUrl;
         } catch (Exception $e) {
             Log::info($e);
 
