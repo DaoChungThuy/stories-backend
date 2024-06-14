@@ -17,6 +17,6 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         return $this->model->whereHas('author', function ($author) use ($userId) {
             $author->where('id', $userId);
-        })->dd()->orderByDesc('created_at');
+        })->orderByDesc('created_at');
     }
 }
