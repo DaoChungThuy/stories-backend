@@ -19,7 +19,6 @@ class GetBooksPostedService extends BaseService
     {
         try {
             return $this->bookRepository->getBooks(auth()->user()->id)->get();
-            // return $this->bookRepository->getBooks(auth()->user()->id)->first()->books;
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 

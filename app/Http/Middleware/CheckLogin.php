@@ -16,9 +16,7 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user() == null) {
-            return redirect(env('VUE_URL_LOGIN'));
-        }
+        if (!auth()->check()) return redirect(env('VUE_URL_LOGIN'));
 
         return $next($request);
     }

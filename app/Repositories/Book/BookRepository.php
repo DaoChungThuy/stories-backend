@@ -14,13 +14,14 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
         $this->model = $book;
     }
 
+    /**
+     * Get books by user id
+     * @param $userId
+     */
     public function getBooks($userId)
     {
-        return Author::where('create_by_user_id', $userId)->with('books.chapters');
-        // return $this->model->with('author');
-        // return $this->model
-        //     ->join('authors', 'authors.id', '=', 'books.author_id')
-        //     ->where('authors.create_by_user_id', $userId)
-        //     ->select('books.*');
+        return $this->model->whereHas('author', function ($author) use ($userId) {
+            $author->where('create_by_user_id', $userId);
+        })->with('followers', 'chapters', 'bookLikes');
     }
 }

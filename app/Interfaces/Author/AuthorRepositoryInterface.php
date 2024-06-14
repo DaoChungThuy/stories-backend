@@ -6,4 +6,5 @@ use App\Interfaces\CrudRepositoryInterface;
 
 interface AuthorRepositoryInterface extends CrudRepositoryInterface
 {
+    public function findAuthorByUserId($userId);
 }
