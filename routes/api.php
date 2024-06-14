@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
         Route::post('logout', [AuthController::class, 'logout']);
     });
+    Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
