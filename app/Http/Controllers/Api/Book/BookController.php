@@ -14,11 +14,11 @@ class BookController extends Controller
         $books = resolve(GetBookByAuthorService::class)->setParams($authorId)->handle();
 
         if (!$books) {
-            return $this->responseErrors(__('author.register_failed'));
+            return $this->responseErrors(__('book.get_falsed'));
         }
 
         return $this->responseSuccess([
-            'message' => __('author.register_success'),
+            'message' => __('book.get_success'),
             'data' => BookResource::apiPaginate($books, $request),
         ]);
     }
