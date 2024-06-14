@@ -12,4 +12,14 @@ class AuthorRepository extends BaseRepository implements AuthorRepositoryInterfa
     {
         $this->model = $author;
     }
+
+    /**
+     * Find author by user id.
+     * @param $userId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function findAuthorByUserId($userId)
+    {
+        return $this->model->where('create_by_user_id', $userId)->first();
+    }
 }

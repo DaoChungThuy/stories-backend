@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
+        Route::post('logout', [AuthController::class, 'logout']);
     });
 });
 
@@ -34,10 +36,17 @@ Route::group(['prefix' => 'service-package'], function () {
     Route::post('', [ServicePackageController::class, 'create']);
 });
 
-Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
-});
+Route::middleware('checkLogin')->group(function () {
+    Route::group(['prefix' => 'user-service-packages'], function () {
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
+    });
 
-Route::group(['prefix' => 'payment'], function () {
-    Route::post('', [PaymentController::class, 'payment']);
+    Route::group(['prefix' => 'authors'], function () {
+        Route::get('', [AuthorController::class, 'getData']);
+        Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+    });
+
+    Route::group(['prefix' => 'payment'], function () {
+        Route::post('', [PaymentController::class, 'payment']);
+    });
 });

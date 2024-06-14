@@ -40,7 +40,7 @@ class Author extends Model
 
     /**
      * Get the books for the author.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function books()
