@@ -13,6 +13,7 @@ use App\Services\Api\Admin\Book\GetMyBooksService;
 use App\Services\Api\Admin\Book\UpdateBookService;
 use App\Services\Crawl\CrawlDataService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminBookController extends Controller
 {
@@ -21,7 +22,7 @@ class AdminBookController extends Controller
         $book = resolve(CrawlDataService::class)->setParams($request->validated())->handle();
 
         if (!$book) {
-            return $this->responseErrors(__('book.create_falsed'));
+            return $this->responseErrors(__('book.create_falsed'), Response::HTTP_BAD_REQUEST);
         }
 
         return $this->responseSuccess([
