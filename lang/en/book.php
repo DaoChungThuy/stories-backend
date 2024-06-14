@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Book Language Lines
@@ -13,6 +12,8 @@ return [
     |
     */
 
+    'generate_desc_success' => 'New description was generated successfully.',
+    'generate_desc_fail' => 'New description was generated failed.',
     'comic_style' => 'The series is a comic book series.',
     'chapter' => 'Chapter: ',
     'create_falsed' => 'Create failed.',

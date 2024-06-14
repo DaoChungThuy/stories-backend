@@ -12,6 +12,13 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * Generate a JSON response for error messages.
+     *
+     * @param string
+     * @param int
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function responseErrors($message = '', $statusCode = Response::HTTP_FORBIDDEN)
     {
         return response()->json([
@@ -20,6 +27,13 @@ class Controller extends BaseController
         ], $statusCode);
     }
 
+    /**
+     * Generate a JSON response for success messages.
+     *
+     * @param string
+     * @param int
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function responseSuccess($data, $statusCode = Response::HTTP_OK)
     {
         return response()->json(
