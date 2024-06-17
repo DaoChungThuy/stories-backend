@@ -37,12 +37,14 @@ Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 
 Route::group(['prefix' => 'service-package'], function () {
-    Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
-    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
     Route::get('', [ServicePackageController::class, 'getData']);
-    Route::post('', [ServicePackageController::class, 'create'])->middleware('checkLogin');
+    Route::post('', [ServicePackageController::class, 'create']);
+    Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
 });
 
+Route::group(['prefix' => 'user-service-packages'], function () {
+    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+});
 
 Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'user-service-packages'], function () {
@@ -55,6 +57,8 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('register', [AuthorController::class, 'store']);
         Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
         Route::post('createBook', [BookController::class, 'store']);
+        Route::put('updateBook/{bookId}', [BookController::class, 'update']);
+        Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
     });
 
     Route::group(['prefix' => 'payment'], function () {
