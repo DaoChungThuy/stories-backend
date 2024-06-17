@@ -31,9 +31,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EmailServiceInterface::class, EmailService::class);
         $this->app->bind(GenreRepositoryInterface::class, GenreRepository::class);
         $this->app->bind(AuthorRepositoryInterface::class, AuthorRepository::class);
+        $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
         $this->app->bind(ServicePackageRepositoryInterface::class, ServicePackageRepository::class);
         $this->app->bind(UserServicePackageRepositoryInterFace::class, UserServicePackageRepository::class);
-        $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
     }
 
     /**
