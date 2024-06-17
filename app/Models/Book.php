@@ -32,15 +32,7 @@ class Book extends Model
      */
     public function getCoverImageAttribute($value)
     {
-        return asset(Storage::url($value));
-    }
-
-    /**
-     * Get full URL of cover image
-     */
-    public function getAttributeImageURL()
-    {
-        return $this->cover_image; 
+        return asset(Storage::url('image/'. $value));
     }
 
     /**
@@ -101,5 +93,14 @@ class Book extends Model
     public function author()
     {
         return $this->belongsTo(Author::class);
+    }
+
+    /**
+     * Get the user chapter for the book.
+     * @return \Illuminate\Database\Eloquent\Relations\hasManyThrough
+     */
+    public function userChapters()
+    {
+        return $this->hasManyThrough(UserChapter::class, Chapter::class);
     }
 }

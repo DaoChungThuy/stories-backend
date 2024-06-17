@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\Book;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Book\GenerateDescRequest;
+use App\Http\Resources\Api\Book\BookDetailResource;
+use App\Http\Resources\Api\Book\BookHistoryResource;
+use App\Services\Api\Book\FindBookByIdService;
 use App\Services\Api\Book\GenerateDescBookService;
+use App\Services\Api\Book\GetReadingHistoryService;
 
 class BookController extends Controller
 {
@@ -41,5 +45,40 @@ class BookController extends Controller
             'message' => __('book.generate_desc_success'),
             'data' => $newDescription,
         ]);
+    }
+
+    /**
+     * Get book detail.
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getData($id)
+    {
+        $book = resolve(FindBookByIdService::class)->setParams($id)->handle();
+
+        if ($book) {
+            return $this->responseSuccess([
+                'data' => BookDetailResource::make($book)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * Get reading history.
+     * @return \Illuminate\Http\Response
+     */
+    public function getHistory()
+    {
+        $books = resolve(GetReadingHistoryService::class)->handle();
+
+        if ($books) {
+            return $this->responseSuccess([
+                'data' => BookHistoryResource::collection($books)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
     }
 }

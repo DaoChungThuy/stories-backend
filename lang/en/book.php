@@ -18,4 +18,5 @@ return [
     'chapter' => 'Chapter: ',
     'create_falsed' => 'Create failed.',
     'create_success' => 'Create success.',
+    'not_found' => 'Book not found.',
 ];

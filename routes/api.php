@@ -51,3 +51,8 @@ Route::group(['prefix' => 'authors'], function () {
     Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
     Route::get('/follower', [AuthorController::class, 'getFollowers']);
 });
+
+Route::group(['prefix' => 'book'], function () {
+    Route::get('/reading-history', [BookController::class, 'getHistory']);
+    Route::get('/{id}', [BookController::class, 'getData']);
+});
