@@ -10,9 +10,5 @@ interface AuthorRepositoryInterface extends CrudRepositoryInterface
     
     public function findAuthorByUserId($userId);
 
-    public function getChaptersPosted($authorId);
-
-    public function getFollowers($authorId);
-
     public function getAuthorByData($colum, $data, $compare = '=');
 }
