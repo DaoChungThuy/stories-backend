@@ -31,4 +31,9 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
             $author->where('create_by_user_id', $userId);
         })->with('followers', 'chapters', 'bookLikes');
     }
+
+    public function getBookByAuthor($authorId)
+    {
+        return $this->model->where('author_id', $authorId);
+    }
 }

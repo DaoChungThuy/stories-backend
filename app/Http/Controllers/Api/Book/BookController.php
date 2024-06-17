@@ -9,6 +9,8 @@ use App\Http\Requests\Api\Book\CreateBookRequest;
 use App\Http\Resources\Api\Book\BookResource;
 use App\Services\Api\Book\CreateBookService;
 use Symfony\Component\HttpFoundation\Response;
+use App\Services\Api\Book\GetBookByAuthorService;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -58,6 +60,20 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' =>  __('book.create_success'),
             'data' => new BookResource($book),
+        ]);
+    }
+
+    public function getBookByAuthor(Request $request, $authorId)
+    {
+        $books = resolve(GetBookByAuthorService::class)->setParams($authorId)->handle();
+
+        if (!$books) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => BookResource::apiPaginate($books, $request),
         ]);
     }
 }
