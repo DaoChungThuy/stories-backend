@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
+use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,5 +51,9 @@ Route::group(['prefix' => 'authors'], function () {
     Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
     Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
     Route::get('/follower', [AuthorController::class, 'getFollowers']);
+    Route::post('register', [AuthorController::class, 'store']);
+    Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
+    Route::post('createBook', [BookController::class, 'store']);
+    Route::put('updateBook/{bookId}', [BookController::class, 'update']);
     Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
 });

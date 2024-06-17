@@ -6,5 +6,5 @@ use App\Interfaces\CrudRepositoryInterface;
 
 interface BookRepositoryInterface extends CrudRepositoryInterface
 {
-    //
+    public function getBookByAuthor($authorId);
 }
