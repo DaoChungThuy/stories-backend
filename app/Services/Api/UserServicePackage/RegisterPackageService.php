@@ -20,7 +20,7 @@ class RegisterPackageService extends BaseService
     {
         try {
             $existingServicePackage  = $this->userServiceRepository
-                ->checkUserService($this->data['user_id'], $this->data['service_package_id']);
+                ->checkUserService($this->data['user_id'], $this->data['service_id']);
 
             if ($existingServicePackage) {
                 return response()->json([
@@ -29,7 +29,11 @@ class RegisterPackageService extends BaseService
             }
 
             $newUserService =  $this->userServiceRepository
-                ->create([...$this->data, 'start_date' => now()]);
+                ->create([
+                    'user_id' => $this->data['user_id'],
+                    'service_package_id' => $this->data['service_id'],
+                    'start_date' => now()
+                ]);
 
             return response()->json([
                 'data' => $newUserService,

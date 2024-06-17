@@ -40,18 +40,23 @@ Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->na
 Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
 
 Route::group(['prefix' => 'service-package'], function () {
-    Route::get('', [ServicePackageController::class, 'getData']);
-    Route::post('', [ServicePackageController::class, 'create']);
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
+    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
+    Route::get('', [ServicePackageController::class, 'getData']);
+    Route::post('', [ServicePackageController::class, 'create'])->middleware('checkLogin');
 });
 
 Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'user-service-packages'], function () {
-        Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
     });
 
     Route::group(['prefix' => 'authors'], function () {
         Route::get('', [AuthorController::class, 'getData']);
         Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+    });
+
+    Route::group(['prefix' => 'payment'], function () {
+        Route::post('', [PaymentController::class, 'payment']);
     });
 });

@@ -6,14 +6,35 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ServicePackage\CreateServicePackageRequest;
 use App\Http\Requests\Api\ServicePackage\RegisterUserServiceRequest;
 use App\Services\Api\ServicePackage\CreateServicePackageService;
+use App\Services\Api\ServicePackage\FindServicePackageById;
 use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
 use App\Services\Api\ServicePackage\GetServicePackageService;
 use App\Services\Api\UserServicePackage\RegisterPackageService;
+use App\Services\Payment\Refund\StripeRefundService;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServicePackageController extends Controller
 {
     const LIMIT_SERVICE_POPULAR = 5;
+
+    /**
+     * fetch service package by id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function findPackage($id)
+    {
+        $servicePackage = resolve(FindServicePackageById::class)->setParams($id)->handle();
+
+        if ($servicePackage) {
+            return $this->responseSuccess([
+                'data' => $servicePackage
+            ]);
+        }
+
+        return $this->responseErrors(__('servicePackage.not_found'));
+    }
 
     /**
      * fetch service package list
@@ -55,20 +76,25 @@ class ServicePackageController extends Controller
 
     /**
      * register service package for user
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $serviceId
+     * @param int $userId
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function registerServicePackage(RegisterUserServiceRequest $request)
+    public function registerServicePackage($sessionId, $serviceId, $userId)
     {
-        $userService = resolve(RegisterPackageService::class)->setParams($request->validated())->handle();
+        $userService = resolve(RegisterPackageService::class)->setParams([
+            'service_id' => $serviceId,
+            'user_id' => $userId
+        ])->handle();
 
         if ($userService->getStatusCode() !== Response::HTTP_OK) {
-            return $this->responseErrors($userService->getData()->message, $userService->getStatusCode());
+            // resolve(StripeRefundService::class)->StripeRefund($sessionId);
+            Log::error($userService->getData()->message);
+
+            return redirect(env('RETURN_URL_ERROR')  . '&message=' . $userService->getData()->message);
         }
 
-        return $this->responseSuccess([
-            'data' => $userService->getData()->data,
-            'message' => $userService->getData()->message
-        ]);
+        return redirect(env('RETURN_URL_SUCCESS'));
     }
 
     /**
