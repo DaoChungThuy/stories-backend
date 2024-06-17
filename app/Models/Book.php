@@ -97,10 +97,10 @@ class Book extends Model
 
     /**
      * Get the user chapter for the book.
-     * @return \Illuminate\Database\Eloquent\Relations\hasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\hasOneThrough
      */
     public function userChapters()
     {
-        return $this->hasManyThrough(UserChapter::class, Chapter::class);
+        return $this->hasOneThrough(UserChapter::class, Chapter::class);
     }
 }

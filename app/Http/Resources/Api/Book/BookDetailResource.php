@@ -4,6 +4,8 @@ namespace App\Http\Resources\Api\Book;
 
 use App\Http\Resources\Api\Author\AuthorResource;
 use App\Http\Resources\Api\BaseResource;
+use App\Http\Resources\Api\Chapter\ChapterResource;
+use App\Http\Resources\Api\Genre\GenreResource;
 
 class BookDetailResource extends BaseResource
 {
@@ -30,8 +32,8 @@ class BookDetailResource extends BaseResource
             'followers' => $this->followers_count,
             'likes' => $this->book_likes_count,
             'author' => AuthorResource::make($this->author),
-            'genre' => $this->genre,
-            'chapters' => $this->chapters,
+            'genre' => GenreResource::make($this->genre),
+            'chapters' => ChapterResource::collection($this->chapters),
         ];
     }
 }

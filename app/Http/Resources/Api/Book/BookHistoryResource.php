@@ -24,7 +24,7 @@ class BookHistoryResource extends BaseResource
             'cover_image' => $this->cover_image,
             'package_type' => $this->package_type,
             'story_type' => $this->story_type,
-            'user_chapters' => $this->userChapters[0],
+            'user_chapters' => $this->userChapters,
             'likes' => $this->book_likes_count,
         ];
     }
