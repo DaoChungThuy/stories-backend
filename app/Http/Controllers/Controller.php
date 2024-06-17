@@ -30,7 +30,7 @@ class Controller extends BaseController
     /**
      * Generate a JSON response for success messages.
      *
-     * @param string
+     * @param array
      * @param int
      * @return \Illuminate\Http\JsonResponse
      */
