@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\Book\BookController;
@@ -24,7 +25,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->withoutMiddleware('auth:api');
         Route::post('logout', [AuthController::class, 'logout']);
     });
+    Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
 });
+
+Route::POST('payment', [PaymentController::class, 'payment']);
+
+Route::resource('genres', GenreController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
@@ -41,6 +47,10 @@ Route::group(['prefix' => 'user-service-packages'], function () {
 });
 
 Route::group(['prefix' => 'authors'], function () {
+    Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+    Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
+    Route::get('/follower', [AuthorController::class, 'getFollowers']);
     Route::post('register', [AuthorController::class, 'store']);
     Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
+    Route::post('createBook', [BookController::class, 'store']);
 });
