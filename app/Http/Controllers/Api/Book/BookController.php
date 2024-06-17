@@ -11,6 +11,8 @@ use App\Services\Api\Book\CreateBookService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Services\Api\Book\UpdateBookService;
 
 class BookController extends Controller
 {
@@ -74,6 +76,21 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' => __('book.get_success'),
             'data' => BookResource::apiPaginate($books, $request),
+        ]);
+    }
+
+    public function update(UpdateBookRequest $updateBookRequest, $bookId)
+    {
+        $data = array_merge($updateBookRequest->validated(), ['id' => $bookId]);
+        $book = resolve(UpdateBookService::class)->setParams($data)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.update_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' =>  __('book.update_success'),
+            'data' => new BookResource($book),
         ]);
     }
 }
