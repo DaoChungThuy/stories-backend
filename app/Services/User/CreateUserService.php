@@ -27,6 +27,8 @@ class CreateUserService extends BaseService
                 $this->data['avatar'] = $this->uploadFile($this->data['avatar']);
             }
 
+            $this->data['password'] = bcrypt($this->data['password']);
+
             return $this->userRepository->create($this->data);
         } catch (Exception $e) {
             Log::info($e);
