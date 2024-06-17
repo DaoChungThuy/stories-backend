@@ -4,9 +4,10 @@ namespace App\Services\Api\Author;
 
 use App\Interfaces\Author\AuthorRepositoryInterface;
 use App\Services\BaseService;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
-class GetBooksPostedService extends BaseService
+class GetAuthorService extends BaseService
 {
     protected $authorRepository;
 
@@ -18,11 +19,9 @@ class GetBooksPostedService extends BaseService
     public function handle()
     {
         try {
-            $author = $this->authorRepository->findAuthorByUserId(auth()->user()->id);
-
-            return $this->authorRepository->getBooks($author->id);
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
+           return $this->authorRepository->findAuthorByUserId(auth()->id());
+        } catch (Exception $e) {
+            Log::info($e);
 
             return false;
         }
