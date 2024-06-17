@@ -15,11 +15,10 @@ class VertifyEmailUserService extends BaseService
         $this->userRepository = $userRepository;
     }
 
-
     public function handle()
     {
         try {
-            return $this->userRepository->vertifyEmail($this->data);
+            return $this->userRepository->verifyEmail($this->data);
         } catch (\Throwable $th) {
             Log::error($th);
 

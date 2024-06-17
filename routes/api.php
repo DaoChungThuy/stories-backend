@@ -37,19 +37,29 @@ Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 
 Route::group(['prefix' => 'service-package'], function () {
-    Route::get('', [ServicePackageController::class, 'getData']);
-    Route::post('', [ServicePackageController::class, 'create']);
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
+    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
+    Route::get('', [ServicePackageController::class, 'getData']);
+    Route::post('', [ServicePackageController::class, 'create'])->middleware('checkLogin');
 });
 
-Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
-});
 
-Route::group(['prefix' => 'authors'], function () {
-    Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
-    Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
-    Route::get('/follower', [AuthorController::class, 'getFollowers']);
+Route::middleware('checkLogin')->group(function () {
+    Route::group(['prefix' => 'user-service-packages'], function () {
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
+    });
+
+    Route::group(['prefix' => 'authors'], function () {
+        Route::get('', [AuthorController::class, 'getData']);
+        Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+        Route::post('register', [AuthorController::class, 'store']);
+        Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
+        Route::post('createBook', [BookController::class, 'store']);
+    });
+
+    Route::group(['prefix' => 'payment'], function () {
+        Route::post('', [PaymentController::class, 'payment']);
+    });
 });
 
 Route::group(['prefix' => 'book'], function () {

@@ -8,6 +8,12 @@ use App\Http\Resources\Api\Book\BookDetailResource;
 use App\Http\Resources\Api\Book\BookHistoryResource;
 use App\Services\Api\Book\FindBookByIdService;
 use App\Services\Api\Book\GenerateDescBookService;
+use App\Http\Requests\Api\Book\CreateBookRequest;
+use App\Http\Resources\Api\Book\BookResource;
+use App\Services\Api\Book\CreateBookService;
+use Symfony\Component\HttpFoundation\Response;
+use App\Services\Api\Book\GetBookByAuthorService;
+use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 
 class BookController extends Controller
@@ -44,6 +50,34 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' => __('book.generate_desc_success'),
             'data' => $newDescription,
+        ]);
+    }
+
+    public function store(CreateBookRequest $createBookRequest)
+    {
+        $book = resolve(CreateBookService::class)->setParams($createBookRequest->validated())->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.create_falsed'), Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->responseSuccess([
+            'message' =>  __('book.create_success'),
+            'data' => new BookResource($book),
+        ]);
+    }
+
+    public function getBookByAuthor(Request $request, $authorId)
+    {
+        $books = resolve(GetBookByAuthorService::class)->setParams($authorId)->handle();
+
+        if (!$books) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => BookResource::apiPaginate($books, $request),
         ]);
     }
 

@@ -28,7 +28,7 @@ class Book extends Model
     ];
 
     /**
-     * asset url for cover image
+     * Get full URL of cover image
      */
     public function getCoverImageAttribute($value)
     {

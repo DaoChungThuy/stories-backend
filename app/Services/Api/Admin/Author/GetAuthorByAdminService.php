@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Api\Author;
+namespace App\Services\Api\Admin\Author;
 
 use App\Interfaces\Author\AuthorRepositoryInterface;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class getFollowersService extends BaseService
+class GetAuthorByAdminService extends BaseService
 {
     protected $authorRepository;
 
@@ -19,9 +19,9 @@ class getFollowersService extends BaseService
     public function handle()
     {
         try {
-            $author = $this->authorRepository->findAuthorByUserId(auth()->user()->id);
+            $authors =  $this->authorRepository->getAuthorByData('create_by_user_id', auth()->user()->id)->get();
 
-            return $this->authorRepository->getFollowers($author->id);
+            return $authors;
         } catch (Exception $e) {
             Log::info($e);
 
