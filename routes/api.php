@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Crawl\CrawlStoryController;
 use App\Http\Controllers\Api\Book\BookController;
+use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -35,6 +36,8 @@ Route::resource('genres', GenreController::class);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
+
+Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
 
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('', [ServicePackageController::class, 'getData']);
