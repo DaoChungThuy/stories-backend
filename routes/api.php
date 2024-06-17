@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Models\Book;

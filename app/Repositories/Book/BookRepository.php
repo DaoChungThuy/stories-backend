@@ -12,4 +12,9 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         $this->model = $book;
     }
+
+    public function getBookByAuthor($authorId)
+    {
+        return $this->model->where('author_id', $authorId);
+    }
 }
