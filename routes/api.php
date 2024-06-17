@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Crawl\CrawlStoryController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
@@ -37,14 +36,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 
-Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
-
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
     Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
     Route::get('', [ServicePackageController::class, 'getData']);
     Route::post('', [ServicePackageController::class, 'create'])->middleware('checkLogin');
 });
+
 
 Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'user-service-packages'], function () {
@@ -54,6 +52,9 @@ Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'authors'], function () {
         Route::get('', [AuthorController::class, 'getData']);
         Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+        Route::post('register', [AuthorController::class, 'store']);
+        Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
+        Route::post('createBook', [BookController::class, 'store']);
     });
 
     Route::group(['prefix' => 'payment'], function () {
