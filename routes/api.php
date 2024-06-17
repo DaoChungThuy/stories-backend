@@ -26,11 +26,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
     Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
+    Route::group(['prefix' => 'admin'], function () {
+        Route::resource('genres', GenreController::class);
+    });
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
-
-Route::resource('genres', GenreController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
