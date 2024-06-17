@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
-use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
