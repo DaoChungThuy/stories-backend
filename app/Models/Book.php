@@ -28,19 +28,11 @@ class Book extends Model
     ];
 
     /**
-     * asset url for cover image
+     * Get full URL of cover image
      */
     public function getCoverImageAttribute($value)
     {
         return asset(Storage::url($value));
-    }
-
-    /**
-     * Get full URL of cover image
-     */
-    public function getAttributeImageURL()
-    {
-        return $this->cover_image; 
     }
 
     /**

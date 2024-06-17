@@ -8,4 +8,5 @@ return [
     'register_success' => 'Author registration successful',
     'get_failed' => 'Author get failed',
     'get_success' => 'Author get successful',
+    'not_found' => 'Author not found',
 ];
