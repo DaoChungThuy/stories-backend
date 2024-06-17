@@ -58,6 +58,7 @@ Route::middleware('checkLogin')->group(function () {
         Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
         Route::post('createBook', [BookController::class, 'store']);
         Route::put('updateBook/{bookId}', [BookController::class, 'update']);
+        Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
     });
 
     Route::group(['prefix' => 'payment'], function () {

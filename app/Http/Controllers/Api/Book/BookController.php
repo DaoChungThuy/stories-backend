@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Book;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Book\GenerateDescRequest;
+use App\Services\Api\Book\DeleteBookService;
 use App\Services\Api\Book\GenerateDescBookService;
 use App\Http\Requests\Api\Book\CreateBookRequest;
 use App\Http\Resources\Api\Book\BookResource;
@@ -91,6 +92,19 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' =>  __('book.update_success'),
             'data' => new BookResource($book),
+        ]);
+    }
+
+    public function destroy($book_id)
+    {
+        $book = resolve(DeleteBookService::class)->setParams($book_id)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.delete_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.delete_success'),
         ]);
     }
 }
