@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Crawl\CrawlStoryController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
@@ -37,8 +36,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
 
-Route::GET('crawl_data', [CrawlStoryController::class, 'crawl']);
-
 Route::group(['prefix' => 'service-package'], function () {
     Route::get('', [ServicePackageController::class, 'getData']);
     Route::post('', [ServicePackageController::class, 'create']);
@@ -49,12 +46,21 @@ Route::group(['prefix' => 'user-service-packages'], function () {
     Route::post('', [ServicePackageController::class, 'registerServicePackage']);
 });
 
-Route::group(['prefix' => 'authors'], function () {
-    Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
-    Route::get('/chapter-posted', [AuthorController::class, 'chapterPosted']);
-    Route::get('/follower', [AuthorController::class, 'getFollowers']);
-    Route::post('register', [AuthorController::class, 'store']);
-    Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
-    Route::post('createBook', [BookController::class, 'store']);
-    Route::put('updateBook/{bookId}', [BookController::class, 'update']);
+Route::middleware('checkLogin')->group(function () {
+    Route::group(['prefix' => 'user-service-packages'], function () {
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
+    });
+
+    Route::group(['prefix' => 'authors'], function () {
+        Route::get('', [AuthorController::class, 'getData']);
+        Route::get('/book-posted', [AuthorController::class, 'bookPosted']);
+        Route::post('register', [AuthorController::class, 'store']);
+        Route::get('getBook/{authorId}', [BookController::class, 'getBookByAuthor']);
+        Route::post('createBook', [BookController::class, 'store']);
+        Route::put('updateBook/{bookId}', [BookController::class, 'update']);
+    });
+
+    Route::group(['prefix' => 'payment'], function () {
+        Route::post('', [PaymentController::class, 'payment']);
+    });
 });

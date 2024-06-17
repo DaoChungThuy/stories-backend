@@ -47,22 +47,4 @@ class Author extends Model
     {
         return $this->hasMany(Book::class);
     }
-
-    /**
-     * Get the chapters for the author.
-     * @return \Illuminate\Database\Eloquent\Relations\hasManyThrough
-     */
-    public function chapters()
-    {
-        return $this->hasManyThrough(Chapter::class, Book::class);
-    }
-
-    /**
-     * Get the followers for the author.
-     * @return \Illuminate\Database\Eloquent\Relations\hasManyThrough
-     */
-    public function followers()
-    {
-        return $this->hasManyThrough(Follower::class, Book::class);
-    }
 }
