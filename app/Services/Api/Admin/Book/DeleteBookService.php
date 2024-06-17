@@ -19,7 +19,7 @@ class DeleteBookService extends BaseService
     public function handle()
     {
         try {
-            $authors =  $this->bookRepository->delete($this->data);
+            $this->bookRepository->delete($this->data);
 
             return true;
         } catch (Exception $e) {
