@@ -13,6 +13,11 @@ class AuthorRepository extends BaseRepository implements AuthorRepositoryInterfa
         $this->model = $author;
     }
 
+    public function getAuthorByData($colum, $data, $compare = '=')
+    {
+        return $this->model->where($colum, $compare, $data);
+    }
+
     /**
      * Find author by user id.
      * @param $userId
