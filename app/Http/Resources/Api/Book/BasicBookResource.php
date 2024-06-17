@@ -22,7 +22,7 @@ class BasicBookResource extends BaseResource
             'genre_id' => $this->genre_id,
             'description' => $this->description,
             'status' => $this->status,
-            'cover_image' => asset(Storage::url('image/' . $this->cover_image)),
+            'cover_image' => $this->cover_image,
             'package_type' => $this->package_type,
             'story_type' => $this->story_type,
         ];

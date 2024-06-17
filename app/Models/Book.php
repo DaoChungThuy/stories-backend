@@ -32,7 +32,7 @@ class Book extends Model
      */
     public function getCoverImageAttribute($value)
     {
-        return asset(Storage::url('image/'. $value));
+        return asset(Storage::url('image/' . $value));
     }
 
     /**
