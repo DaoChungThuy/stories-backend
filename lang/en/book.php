@@ -24,4 +24,5 @@ return [
     'delete_success' => 'Delete success.',
     'update_falsed' => 'Update failed.',
     'update_success' => 'Update success.',
+    'not_found' => 'Book not found.',
 ];

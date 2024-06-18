@@ -69,3 +69,9 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('follow', [BookController::class, 'followBook']);
     });
 });
+
+Route::group(['prefix' => 'book'], function () {
+    Route::get('/reading-history', [BookController::class, 'getHistory']);
+    Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
+    Route::get('/{id}', [BookController::class, 'getData']);
+});
