@@ -15,11 +15,13 @@ class ChapterResource extends BaseResource
     public function toArray($request)
     {
         return [
-            "id" => $this->id,
-            "book_id" => $this->book_id,
-            "chapter_number" => $this->chapter_number,
-            "chapter_title" => $this->chapter_title,
-            "chapter_content" => $this->chapter_content,
+            'id' => $this->id,
+            'book_id' => $this->book_id,
+            'chapter_number' => $this->chapter_number,
+            'chapter_title' => $this->chapter_title,
+            'chapter_content' => $this->chapter_content,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

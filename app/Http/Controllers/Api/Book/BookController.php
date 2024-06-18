@@ -17,6 +17,8 @@ use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Http\Resources\Api\Book\TopBookResource;
+use App\Services\Api\Book\GetTopBookService;
 use App\Services\Api\Book\UpdateBookService;
 
 class BookController extends Controller
@@ -115,7 +117,7 @@ class BookController extends Controller
     /**
      * Get book detail.
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getData($id)
     {
@@ -132,7 +134,7 @@ class BookController extends Controller
 
     /**
      * Get reading history.
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getHistory()
     {
@@ -141,6 +143,24 @@ class BookController extends Controller
         if ($books) {
             return $this->responseSuccess([
                 'data' => BookHistoryResource::collection($books)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * Get top book.
+     * @return \Illuminate\Http\JsonResponse
+     * @param int $day
+     */
+    public function getTopBook($day)
+    {
+        $books = resolve(GetTopBookService::class)->setParams($day)->handle();
+
+        if($books){
+            return $this->responseSuccess([
+                'data' => TopBookResource::collection($books)
             ]);
         }
 

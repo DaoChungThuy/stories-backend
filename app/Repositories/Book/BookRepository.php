@@ -6,6 +6,8 @@ use App\Interfaces\Book\BookRepositoryInterface;
 use App\Models\Author;
 use App\Models\Book;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Log;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 class BookRepository extends BaseRepository implements BookRepositoryInterface
 {
@@ -63,6 +65,19 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
         return $this->model->whereHas('userChapters', function ($query) use ($id) {
             $query->where('user_id', $id);
         })->with('userChapters.chapter')
-          ->withCount('bookLikes');
+            ->withCount('bookLikes');
+    }
+
+    /**
+     * Get top book.
+     * @param int $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getTopBook($days, $limit)
+    {
+        return $this->model->withCount([
+            'bookLikes' => fn ($query) => $query->where('created_at', '>=', now()->subDays($days))
+        ])->with(['chapters' => fn ($query) => $query->orderByDESC('chapter_number')])
+            ->orderByDesc('book_likes_count')->limit($limit);
     }
 }
