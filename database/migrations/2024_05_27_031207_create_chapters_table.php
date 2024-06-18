@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('book_id');
             $table->integer('chapter_number');
             $table->string('chapter_title')->nullable();
-            $table->text('chapter_content');
+            $table->text('chapter_content')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
