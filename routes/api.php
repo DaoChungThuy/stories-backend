@@ -64,4 +64,8 @@ Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'payment'], function () {
         Route::post('', [PaymentController::class, 'payment']);
     });
+
+    Route::group(['prefix' => 'book'], function () {
+        Route::post('follow', [BookController::class, 'followBook']);
+    });
 });
