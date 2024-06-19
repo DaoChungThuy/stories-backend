@@ -25,8 +25,10 @@ class UpdateGenreService extends BaseService
     public function handle()
     {
         try {
-            if (isset($this->data['cover_image']) && $this->data['cover_image']->isValid()) {
-                $this->data['cover_image'] = $this->uploadFile($this->data['cover_image'], 'genre_cover');
+            if (isset($this->data['upload_cover_image']) && $this->data['upload_cover_image']->isValid()) {
+                $this->data['cover_image'] = $this->uploadFile($this->data['upload_cover_image'], 'genre_cover');
+            } else {
+                $this->data['cover_image'] = null;
             }
 
             return $this->genreRepository->update($this->data, $this->data['id']);
