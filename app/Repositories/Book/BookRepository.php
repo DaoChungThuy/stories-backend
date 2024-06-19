@@ -36,4 +36,9 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         return $this->model->where('author_id', $authorId);
     }
+
+    public function getBookList()
+    {
+        return $this->model->with('author')->orderByDesc('updated_at');
+    }
 }
