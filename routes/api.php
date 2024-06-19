@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\Chapter\ChapterController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -60,6 +61,11 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('createBook', [BookController::class, 'store']);
         Route::put('updateBook/{bookId}', [BookController::class, 'update']);
         Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
+        Route::prefix('chapters')->group(function () {
+            Route::get('/{bookId}', [ChapterController::class, 'index']);
+            Route::post('/', [ChapterController::class, 'store']);
+            Route::get('/getNumber/{bookId}', [ChapterController::class, 'countChaptersByBookId']);
+        });
     });
 
     Route::group(['prefix' => 'payment'], function () {
