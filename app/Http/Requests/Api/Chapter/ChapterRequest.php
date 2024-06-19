@@ -23,6 +23,7 @@ class ChapterRequest extends FormRequest
                 'numeric',
             ],
             'chapter_title' => [
+                'nullable',
                 'string',
             ],
             'image' => [
