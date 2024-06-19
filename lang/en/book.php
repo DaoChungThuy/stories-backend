@@ -25,4 +25,6 @@ return [
     'update_falsed' => 'Update failed.',
     'update_success' => 'Update success.',
     'not_found' => 'Book not found.',
+    'follow_success' => 'follow book success.',
+    'follow_failed' => 'Handle follow failed.',
 ];

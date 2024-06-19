@@ -20,7 +20,7 @@ class FolowBookService extends BaseService
         try {
             $this->data['user_id'] = auth()->user()->id;
 
-            return $this->followRepository->create($this->data);
+            return $this->followRepository->handleFollow($this->data);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 

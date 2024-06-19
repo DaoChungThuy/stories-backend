@@ -34,6 +34,7 @@ class BookDetailResource extends BaseResource
             'author' => AuthorResource::make($this->author),
             'genre' => GenreResource::make($this->genre),
             'chapters' => ChapterResource::collection($this->chapters),
+            'is_follow' => auth()->user() ? $this->isFollowedByUser(auth()->user()->id) : false,
         ];
     }
 }
