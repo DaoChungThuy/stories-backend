@@ -8,11 +8,13 @@ use App\Interfaces\Email\EmailServiceInterface;
 use App\Interfaces\Genre\GenreRepositoryInterface;
 use App\Interfaces\User\UserRepositoryInterface;
 use App\Repositories\Genre\GenreRepository;
+use App\Interfaces\Follow\FollowRepositoryInterface;
 use App\Interfaces\ServicePackage\ServicePackageRepositoryInterface;
 use App\Interfaces\UserServicePackage\UserServicePackageRepositoryInterFace;
 use App\Repositories\Author\AuthorRepository;
 use App\Repositories\Book\BookRepository;
 use App\Repositories\ServicePackage\ServicePackageRepository;
+use App\Repositories\Follow\FollowRepository;
 use App\Repositories\User\UserRepository;
 use App\Repositories\UserServicePackage\UserServicePackageRepository;
 use App\Services\Email\EmailService;
@@ -34,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
         $this->app->bind(ServicePackageRepositoryInterface::class, ServicePackageRepository::class);
         $this->app->bind(UserServicePackageRepositoryInterFace::class, UserServicePackageRepository::class);
+        $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
+        $this->app->bind(FollowRepositoryInterface::class, FollowRepository::class);
     }
 
     /**

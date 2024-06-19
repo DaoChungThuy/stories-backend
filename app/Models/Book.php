@@ -94,4 +94,24 @@ class Book extends Model
     {
         return $this->belongsTo(Author::class);
     }
+
+    /**
+     * Get the user chapter for the book.
+     * @return \Illuminate\Database\Eloquent\Relations\hasOneThrough
+     */
+    public function userChapters()
+    {
+        return $this->hasOneThrough(UserChapter::class, Chapter::class);
+    }
+
+    /**
+     * Check if the book is followed by a user.
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function isFollowedByUser($userId)
+    {
+        return $this->followers()->where('user_id', $userId)->exists();
+    }
 }
