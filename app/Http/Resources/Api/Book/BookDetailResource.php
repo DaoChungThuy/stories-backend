@@ -31,6 +31,7 @@ class BookDetailResource extends BaseResource
             'updated_at' => $this->updated_at,
             'followers' => $this->followers_count,
             'likes' => $this->book_likes_count,
+            'total_chapters' => $this->chapters_count,
             'author' => AuthorResource::make($this->author),
             'genre' => GenreResource::make($this->genre),
             'chapters' => ChapterResource::collection($this->chapters),
