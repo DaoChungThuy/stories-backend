@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
 use App\Http\Controllers\Api\ChapterImage\ChapterImageController;
+use App\Http\Controllers\Api\Chapter\ChapterController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -27,11 +28,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
     Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
+    Route::group(['prefix' => 'admin'], function () {
+        Route::resource('genres', GenreController::class);
+    });
 });
 
 Route::POST('payment', [PaymentController::class, 'payment']);
-
-Route::resource('genres', GenreController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
@@ -60,6 +62,11 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('createBook', [BookController::class, 'store']);
         Route::put('updateBook/{bookId}', [BookController::class, 'update']);
         Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
+        Route::prefix('chapters')->group(function () {
+            Route::get('/{bookId}', [ChapterController::class, 'index']);
+            Route::post('/', [ChapterController::class, 'store']);
+            Route::get('/getNumber/{bookId}', [ChapterController::class, 'countChaptersByBookId']);
+        });
     });
 
     Route::group(['prefix' => 'payment'], function () {
