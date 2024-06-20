@@ -94,4 +94,13 @@ class Book extends Model
     {
         return $this->belongsTo(Author::class);
     }
+
+    /**
+     * Get the user chapter for the book.
+     * @return \Illuminate\Database\Eloquent\Relations\hasOneThrough
+     */
+    public function userChapters()
+    {
+        return $this->hasOneThrough(UserChapter::class, Chapter::class);
+    }
 }
