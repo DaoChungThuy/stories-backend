@@ -74,3 +74,5 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/{id}', [BookController::class, 'getData']);
     Route::post('/follow', [BookController::class, 'followBook'])->middleware('checkLogin');
 });
+
+Route::get('check-service/{id_chapter}/{type?}', [BookController::class, 'checkService']);

@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
 use App\Http\Resources\Api\Book\TopBookResource;
+use App\Services\Api\Book\CheckRolePackageService;
 use App\Services\Api\Book\GetTopBookService;
 use App\Services\Api\Book\GetBookListService;
 use App\Services\Api\Book\UpdateBookService;
@@ -161,7 +162,7 @@ class BookController extends Controller
     {
         $books = resolve(GetTopBookService::class)->setParams($day)->handle();
 
-        if($books){
+        if ($books) {
             return $this->responseSuccess([
                 'data' => TopBookResource::collection($books)
             ]);
@@ -196,5 +197,23 @@ class BookController extends Controller
         }
 
         return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * check user has service or not
+     * @param int $chapter_id
+     * @param string $type
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkService($chapter_id, $type = null)
+    {
+        $check = resolve(CheckRolePackageService::class)->setParams([
+            'chapter_id' => $chapter_id,
+            'type' => $type,
+        ])->handle();
+
+        return response()->json([
+            'status' => $check
+        ]);
     }
 }

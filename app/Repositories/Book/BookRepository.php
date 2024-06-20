@@ -85,4 +85,12 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         return $this->model->with('author')->orderByDesc('updated_at');
     }
+
+    public function getBookByChapterId($id_chapter)
+    {
+        return $this->model->whereHas(
+            'chapters',
+            fn ($query) => $query->where('id', $id_chapter)
+        )->first();
+    }
 }
