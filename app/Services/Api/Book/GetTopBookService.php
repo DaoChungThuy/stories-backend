@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class GetTopBookService extends BaseService
 {
     protected $BookRepository;
-    private $LIMIT = 5;
+    const LIMIT = 5;
 
     public function __construct(BookRepositoryInterface $BookRepository)
     {
@@ -19,7 +19,7 @@ class GetTopBookService extends BaseService
     public function handle()
     {
         try {
-            return $this->BookRepository->getTopBook($this->data, $this->LIMIT)->get();
+            return $this->BookRepository->getTopBook($this->data, self::LIMIT)->get();
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
