@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Http\Resources\Api\Book\BookChapterResource;
+use App\Services\Api\Book\GetBookByChapterService;
 use App\Services\Api\Book\UpdateBookService;
 
 class BookController extends Controller
@@ -105,6 +107,20 @@ class BookController extends Controller
 
         return $this->responseSuccess([
             'message' => __('book.delete_success'),
+        ]);
+    }
+
+    public function getBookChapters($chapterId)
+    {
+        $book = resolve(GetBookByChapterService::class)->setParams($chapterId)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => new BookChapterResource($book),
         ]);
     }
 }

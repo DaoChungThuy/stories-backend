@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\ChapterImage\ChapterImageController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -65,3 +66,6 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('', [PaymentController::class, 'payment']);
     });
 });
+
+Route::get('chapterImages/{chapter_id}', [ChapterImageController::class, 'index']);
+Route::get('book/chapter/{chapterId}', [BookController::class, 'getBookChapters']);

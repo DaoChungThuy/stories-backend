@@ -11,4 +11,6 @@ interface BookRepositoryInterface extends CrudRepositoryInterface
     public function getBooks($userId);
 
     public function getBookByAuthor($authorId);
+
+    public function getBookByChapter($chapterId);
 }
