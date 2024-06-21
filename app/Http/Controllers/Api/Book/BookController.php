@@ -191,6 +191,19 @@ class BookController extends Controller
         return $this->responseErrors(__('book.follow_failed'));
     }
 
+    public function getBookChapters($chapterId)
+    {
+        $book = resolve(GetBookByChapterService::class)->setParams($chapterId)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => new BookChapterResource($book),
+        ]);
+    }
     public function getBookList()
     {
         $book  = resolve(GetBookListService::class)->handle();
@@ -219,20 +232,6 @@ class BookController extends Controller
 
         return response()->json([
             'status' => $check
-        ]);
-    }
-
-    public function getBookChapters($chapterId)
-    {
-        $book = resolve(GetBookByChapterService::class)->setParams($chapterId)->handle();
-
-        if (!$book) {
-            return $this->responseErrors(__('book.get_falsed'));
-        }
-
-        return $this->responseSuccess([
-            'message' => __('book.get_success'),
-            'data' => new BookChapterResource($book),
         ]);
     }
 }
