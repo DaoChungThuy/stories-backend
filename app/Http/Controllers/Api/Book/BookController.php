@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Book;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Book\GenerateDescRequest;
+use App\Http\Resources\Api\Book\BookWithAuthorResource;
 use App\Services\Api\Book\DeleteBookService;
 use App\Http\Resources\Api\Book\BookDetailResource;
 use App\Http\Resources\Api\Book\BookHistoryResource;
@@ -18,9 +19,11 @@ use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
 use App\Http\Resources\Api\Book\TopBookResource;
+use App\Services\Api\Book\CheckRolePackageService;
 use App\Services\Api\Book\GetTopBookService;
 use App\Http\Resources\Api\Book\BookChapterResource;
 use App\Services\Api\Book\GetBookByChapterService;
+use App\Services\Api\Book\GetBookListService;
 use App\Services\Api\Book\UpdateBookService;
 use App\Services\Follow\FolowBookService;
 
@@ -199,6 +202,36 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' => __('book.get_success'),
             'data' => new BookChapterResource($book),
+            ]);
+        }
+    public function getBookList()
+    {
+        $book  = resolve(GetBookListService::class)->handle();
+
+        if ($book) {
+            return $this->responseSuccess([
+                'data' => BookWithAuthorResource::collection($book),
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * check user has service or not
+     * @param int $chapter_id
+     * @param string $type
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkService($chapter_id, $type = null)
+    {
+        $check = resolve(CheckRolePackageService::class)->setParams([
+            'chapter_id' => $chapter_id,
+            'type' => $type,
+        ])->handle();
+
+        return response()->json([
+            'status' => $check
         ]);
     }
 }

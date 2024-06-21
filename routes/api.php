@@ -77,11 +77,13 @@ Route::middleware('checkLogin')->group(function () {
 
 Route::group(['prefix' => 'book'], function () {
     Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
+    Route::get('', [BookController::class, 'getBookList']);
     Route::get('/reading-history', [BookController::class, 'getHistory']);
     Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
     Route::get('/{id}', [BookController::class, 'getData']);
-    Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
     Route::post('/follow', [BookController::class, 'followBook'])->middleware('checkLogin');
+    Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
 });
 
 Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
+Route::get('check-service/{id_chapter}/{type?}', [BookController::class, 'checkService']);

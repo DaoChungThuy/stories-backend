@@ -19,4 +19,8 @@ interface BookRepositoryInterface extends CrudRepositoryInterface
     public function getTopBook($days, $limit);
 
     public function getBookByChapter($chapterId);
+  
+    public function getBookList();
+
+    public function getBookByChapterId($id_chapter);
 }
