@@ -44,15 +44,15 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
      * @param int $id
      * @return Book
      */
-    public function findBookById($id)
+    public function findBookById($id, $limitChapter)
     {
         return $this->model->with([
             'author',
-            'chapters' => function ($chapter) {
-                $chapter->orderByDESC('chapter_number');
+            'chapters' => function ($chapter) use ($limitChapter) {
+                $chapter->orderByDESC('chapter_number')->limit($limitChapter);
             },
             'genre'
-        ])->withCount('followers', 'bookLikes')->find($id);
+        ])->withCount('followers', 'bookLikes', 'chapters')->find($id);
     }
 
     /**

@@ -19,7 +19,7 @@ class UpdateGenreRequest extends BaseRequest
                 'string',
                 'max:255',
             ],
-            'cover_image' => [
+            'upload_cover_image' => [
                 'nullable',
                 'image',
                 'mimes:jpeg,png,jpg,gif,svg',
