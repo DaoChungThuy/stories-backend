@@ -81,4 +81,4 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
 });
 
-Route::get('chapterImages/{chapter_id}', [ChapterImageController::class, 'index']);
+Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
