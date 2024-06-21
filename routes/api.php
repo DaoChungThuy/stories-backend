@@ -74,5 +74,11 @@ Route::middleware('checkLogin')->group(function () {
     });
 });
 
+Route::group(['prefix' => 'book'], function () {
+    Route::get('/reading-history', [BookController::class, 'getHistory']);
+    Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
+    Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
+});
+
 Route::get('chapterImages/{chapter_id}', [ChapterImageController::class, 'index']);
 Route::get('book/chapter/{chapterId}', [BookController::class, 'getBookChapters']);

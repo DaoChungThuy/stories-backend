@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\Book;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Book\GenerateDescRequest;
 use App\Services\Api\Book\DeleteBookService;
+use App\Http\Resources\Api\Book\BookDetailResource;
+use App\Http\Resources\Api\Book\BookHistoryResource;
+use App\Services\Api\Book\FindBookByIdService;
 use App\Services\Api\Book\GenerateDescBookService;
 use App\Http\Requests\Api\Book\CreateBookRequest;
 use App\Http\Resources\Api\Book\BookResource;
@@ -12,7 +15,10 @@ use App\Services\Api\Book\CreateBookService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
+use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Http\Resources\Api\Book\TopBookResource;
+use App\Services\Api\Book\GetTopBookService;
 use App\Http\Resources\Api\Book\BookChapterResource;
 use App\Services\Api\Book\GetBookByChapterService;
 use App\Services\Api\Book\UpdateBookService;
@@ -108,6 +114,62 @@ class BookController extends Controller
         return $this->responseSuccess([
             'message' => __('book.delete_success'),
         ]);
+    }
+
+    /**
+     * Get book detail.
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getData($id, $limitChapter = 10)
+    {
+        $book = resolve(FindBookByIdService::class)->setParams([
+            'id' => $id,
+            'limitChapter' => $limitChapter
+        ])->handle();
+
+        if ($book) {
+            return $this->responseSuccess([
+                'data' => BookDetailResource::make($book)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * Get reading history.
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getHistory()
+    {
+        $books = resolve(GetReadingHistoryService::class)->handle();
+
+        if ($books) {
+            return $this->responseSuccess([
+                'data' => BookHistoryResource::collection($books)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
+    }
+
+    /**
+     * Get top book.
+     * @return \Illuminate\Http\JsonResponse
+     * @param int $day
+     */
+    public function getTopBook($day)
+    {
+        $books = resolve(GetTopBookService::class)->setParams($day)->handle();
+
+        if ($books) {
+            return $this->responseSuccess([
+                'data' => TopBookResource::collection($books)
+            ]);
+        }
+
+        return $this->responseErrors(__('book.not_found'));
     }
 
     public function getBookChapters($chapterId)

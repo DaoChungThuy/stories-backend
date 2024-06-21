@@ -12,5 +12,11 @@ interface BookRepositoryInterface extends CrudRepositoryInterface
 
     public function getBookByAuthor($authorId);
 
+    public function findBookById(int $id, $limitChapter);
+
+    public function getReadingHistory(int $id);
+
+    public function getTopBook($days, $limit);
+
     public function getBookByChapter($chapterId);
 }
