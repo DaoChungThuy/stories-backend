@@ -22,6 +22,7 @@ use App\Services\Api\Book\GetTopBookService;
 use App\Http\Resources\Api\Book\BookChapterResource;
 use App\Services\Api\Book\GetBookByChapterService;
 use App\Services\Api\Book\UpdateBookService;
+use App\Services\Follow\FolowBookService;
 
 class BookController extends Controller
 {
@@ -170,6 +171,21 @@ class BookController extends Controller
         }
 
         return $this->responseErrors(__('book.not_found'));
+    }
+
+    public function followBook(Request $request)
+    {
+        $book = resolve(FolowBookService::class)->setParams($request->validate([
+            'book_id' => 'required|integer|exists:books,id',
+        ]))->handle();
+
+        if ($book) {
+            return $this->responseSuccess([
+                'message' => __('book.follow_success'),
+            ]);
+        }
+
+        return $this->responseErrors(__('book.follow_failed'));
     }
 
     public function getBookChapters($chapterId)

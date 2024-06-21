@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Follow\FollowController;
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
@@ -78,7 +79,9 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
     Route::get('/reading-history', [BookController::class, 'getHistory']);
     Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
+    Route::get('/{id}', [BookController::class, 'getData']);
     Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
+    Route::post('/follow', [BookController::class, 'followBook'])->middleware('checkLogin');
 });
 
 Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
