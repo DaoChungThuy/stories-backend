@@ -123,9 +123,12 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getData($id)
+    public function getData($id, $limitChapter = 10)
     {
-        $book = resolve(FindBookByIdService::class)->setParams($id)->handle();
+        $book = resolve(FindBookByIdService::class)->setParams([
+            'id' => $id,
+            'limitChapter' => $limitChapter
+        ])->handle();
 
         if ($book) {
             return $this->responseSuccess([

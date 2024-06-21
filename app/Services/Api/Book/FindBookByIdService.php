@@ -21,7 +21,7 @@ class FindBookByIdService extends BaseService
     public function handle()
     {
         try {
-            return $this->BookRepository->findBookById($this->data);
+            return $this->BookRepository->findBookById((int) $this->data['id'], $this->data['limitChapter']);
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
