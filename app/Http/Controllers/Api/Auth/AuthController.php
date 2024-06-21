@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\Api\Auth\LoginRequest;
+use App\Http\Resources\Api\User\UserResource;
 use App\Services\Auth\LogoutService;
 
 class AuthController extends Controller
@@ -104,7 +105,7 @@ class AuthController extends Controller
         }
 
         return $this->responseSuccess([
-            'user' => $user,
+            'user' => UserResource::make($user),
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60

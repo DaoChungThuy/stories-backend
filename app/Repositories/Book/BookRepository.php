@@ -80,4 +80,17 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
         ])->with(['chapters' => fn ($query) => $query->orderByDESC('chapter_number')])
             ->orderByDesc('book_likes_count')->limit($limit);
     }
+
+    public function getBookList()
+    {
+        return $this->model->with('author')->orderByDesc('updated_at');
+    }
+
+    public function getBookByChapterId($id_chapter)
+    {
+        return $this->model->whereHas(
+            'chapters',
+            fn ($query) => $query->where('id', $id_chapter)
+        )->first();
+    }
 }

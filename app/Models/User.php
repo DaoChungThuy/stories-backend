@@ -119,4 +119,21 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Chapter::class, 'user_chapter', 'user_id', 'chapter_id')->withTimestamps();
     }
+
+    /**
+     * Get all service package for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasManyThrough
+     */
+    public function servicePackages()
+    {
+        return $this->hasManyThrough(
+            ServicePackage::class,
+            UserServicePackage::class,
+            'user_id',
+            'id',
+            'id',
+            'service_package_id'
+        );
+    }
 }
