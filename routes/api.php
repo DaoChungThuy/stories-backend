@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\ChapterImage\ChapterImageController;
 use App\Http\Controllers\Api\Chapter\ChapterController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
@@ -75,6 +76,7 @@ Route::middleware('checkLogin')->group(function () {
 });
 
 Route::group(['prefix' => 'book'], function () {
+    Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
     Route::get('', [BookController::class, 'getBookList']);
     Route::get('/reading-history', [BookController::class, 'getHistory']);
     Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
@@ -83,4 +85,5 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
 });
 
+Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
 Route::get('check-service/{id_chapter}/{type?}', [BookController::class, 'checkService']);

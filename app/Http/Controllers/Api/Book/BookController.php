@@ -22,6 +22,8 @@ use App\Http\Resources\Api\Book\TopBookResource;
 use App\Services\Api\Book\CheckRolePackageService;
 use App\Services\Api\Book\GetTopBookService;
 use App\Services\Api\Book\GetBookListService;
+use App\Http\Resources\Api\Book\BookChapterResource;
+use App\Services\Api\Book\GetBookByChapterService;
 use App\Services\Api\Book\UpdateBookService;
 use App\Services\Follow\FolowBookService;
 
@@ -189,6 +191,19 @@ class BookController extends Controller
         return $this->responseErrors(__('book.follow_failed'));
     }
 
+    public function getBookChapters($chapterId)
+    {
+        $book = resolve(GetBookByChapterService::class)->setParams($chapterId)->handle();
+
+        if (!$book) {
+            return $this->responseErrors(__('book.get_falsed'));
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.get_success'),
+            'data' => new BookChapterResource($book),
+        ]);
+    }
     public function getBookList()
     {
         $book  = resolve(GetBookListService::class)->handle();
