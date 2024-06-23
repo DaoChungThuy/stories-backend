@@ -94,4 +94,11 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
             fn ($query) => $query->where('id', $id_chapter)
         )->first();
     }
+
+    public function getBookByChapter($chapterId)
+    {
+        return $this->model->whereHas('chapters', function ($chapter) use ($chapterId) {
+            $chapter->where('id', $chapterId);
+        })->first();
+    }
 }

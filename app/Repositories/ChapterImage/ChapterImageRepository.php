@@ -12,4 +12,9 @@ class ChapterImageRepository extends BaseRepository implements ChapterImageRepos
     {
         $this->model = $chapterImage;
     }
+
+    public function getChapterImageByData($colum, $data, $compare = '=')
+    {
+        return $this->model->where($colum, $compare, $data)->orderBy('image_number');
+    }
 }

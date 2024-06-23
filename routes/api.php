@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\ChapterImage\ChapterImageController;
 use App\Http\Controllers\Api\Chapter\ChapterController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
@@ -33,8 +34,6 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
-Route::POST('payment', [PaymentController::class, 'payment']);
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
 Route::get('/user/vertify/{token}', [AuthController::class, 'vertifyEmail'])->name('vertifyEmailForUser');
@@ -43,10 +42,7 @@ Route::group(['prefix' => 'service-package'], function () {
     Route::get('', [ServicePackageController::class, 'getData']);
     Route::post('', [ServicePackageController::class, 'create']);
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
-});
-
-Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
 });
 
 Route::middleware('checkLogin')->group(function () {
@@ -75,6 +71,7 @@ Route::middleware('checkLogin')->group(function () {
 });
 
 Route::group(['prefix' => 'book'], function () {
+    Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
     Route::get('', [BookController::class, 'getBookList']);
     Route::get('/reading-history', [BookController::class, 'getHistory']);
     Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
@@ -83,4 +80,5 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
 });
 
+Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
 Route::get('check-service/{id_chapter}/{type?}', [BookController::class, 'checkService']);
