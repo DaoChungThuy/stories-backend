@@ -13,6 +13,7 @@ use App\Services\Api\Book\GenerateDescBookService;
 use App\Http\Requests\Api\Book\CreateBookRequest;
 use App\Http\Resources\Api\Book\BookResource;
 use App\Services\Api\Book\CreateBookService;
+use App\Services\Follow\CountFollowService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
@@ -178,13 +179,18 @@ class BookController extends Controller
 
     public function followBook(Request $request)
     {
-        $book = resolve(FolowBookService::class)->setParams($request->validate([
+        $bookId = $request->validate([
             'book_id' => 'required|integer|exists:books,id',
-        ]))->handle();
+        ]);
+
+        $book = resolve(FolowBookService::class)->setParams($bookId)->handle();
+        $follows = resolve(CountFollowService::class)->setParams($bookId)->handle();
+
 
         if ($book) {
             return $this->responseSuccess([
                 'message' => __('book.follow_success'),
+                'follows' => $follows,
             ]);
         }
 
