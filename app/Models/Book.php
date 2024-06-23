@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-class Book extends Model
+class Book extends Model implements Searchable
 {
     use HasFactory, SoftDeletes;
 
@@ -93,5 +95,15 @@ class Book extends Model
     public function author()
     {
         return $this->belongsTo(Author::class);
+    }
+
+    public function getSearchResult(): SearchResult
+    {
+        return new SearchResult(
+            $this,
+            $this->id,
+            $this->title,
+            $this->description,
+        );
     }
 }

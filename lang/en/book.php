@@ -24,4 +24,7 @@ return [
     'delete_success' => 'Delete success.',
     'update_falsed' => 'Update failed.',
     'update_success' => 'Update success.',
+    'search_success' => 'Search success.',
+    'search_fail' => 'Search fail',
+    'search_no_find' => 'No results were found'
 ];

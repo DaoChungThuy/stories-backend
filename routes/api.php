@@ -65,3 +65,6 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('', [PaymentController::class, 'payment']);
     });
 });
+
+Route::get('search', [BookController::class, 'search']);
+Route::get('filter', [BookController::class, 'filter']);

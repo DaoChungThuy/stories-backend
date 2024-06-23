@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Services\Api\Book\FilterBookService;
+use App\Services\Api\Book\SearchBookService;
 use App\Services\Api\Book\UpdateBookService;
 
 class BookController extends Controller
@@ -105,6 +107,46 @@ class BookController extends Controller
 
         return $this->responseSuccess([
             'message' => __('book.delete_success'),
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $books = resolve(SearchBookService::class)->setParams($request->input('keyword'))->handle();
+
+        if (!$books) {
+            return $this->responseErrors(__('book.search_fail'));
+        }
+
+        if ($books->isEmpty()) {
+            return $this->responseSuccess([
+                'message' => __('book.search_no_find'),
+            ]);
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.search_success'),
+            'data' => $books,
+        ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $books = resolve(FilterBookService::class)->setParams($request->all())->handle();
+
+        if (!$books) {
+            return $this->responseErrors(__('book.search_fail'));
+        }
+
+        if ($books->isEmpty()) {
+            return $this->responseSuccess([
+                'message' => __('book.search_no_find'),
+            ]);
+        }
+
+        return $this->responseSuccess([
+            'message' => __('book.search_success'),
+            'data' => $books,
         ]);
     }
 }
