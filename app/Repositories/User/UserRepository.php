@@ -17,4 +17,18 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->where('email', $email)->first();
     }
+
+    /**
+     * vertify email for user
+     * @param string $token
+     * @return bool
+     */
+    public function verifyEmail($token)
+    {
+        return $this->model->where('verification_token', $token)
+            ->update([
+                'verification_token' => null,
+                'email_verified_at' => now()
+            ]);
+    }
 }

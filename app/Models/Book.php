@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Book extends Model
 {
@@ -27,8 +28,16 @@ class Book extends Model
     ];
 
     /**
+     * Get full URL of cover image
+     */
+    public function getCoverImageAttribute($value)
+    {
+        return asset(Storage::url('image/' . $value));
+    }
+
+    /**
      * Get the comments for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments()
@@ -38,7 +47,7 @@ class Book extends Model
 
     /**
      * Get the likes for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function bookLikes()
@@ -48,7 +57,7 @@ class Book extends Model
 
     /**
      * Get the genre for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function genre()
@@ -58,7 +67,7 @@ class Book extends Model
 
     /**
      * Get the chapters for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function chapters()
@@ -68,7 +77,7 @@ class Book extends Model
 
     /**
      * Get the follower for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function followers()
@@ -78,11 +87,41 @@ class Book extends Model
 
     /**
      * Get the author for the book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author()
     {
         return $this->belongsTo(Author::class);
+    }
+
+    /**
+     * Get the user chapter for the book.
+     * @return \Illuminate\Database\Eloquent\Relations\hasOneThrough
+     */
+    public function userChapters()
+    {
+        return $this->hasOneThrough(UserChapter::class, Chapter::class);
+    }
+
+    /**
+     * Check if the book is followed by a user.
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function isFollowedByUser($userId)
+    {
+        return $this->followers()->where('user_id', $userId)->exists();
+    }
+
+    /**
+     * Get the first chapter id of the book.
+     * @param int $bookId
+     * @return int
+     */
+    public function firstChapterid($bookId)
+    {
+        return $this->chapters()->where('book_id', $bookId)->first()->id;
     }
 }

@@ -16,5 +16,8 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'unauthorized' => 'You are not authorized to access this page.',
+    'email_not_verified' => 'Your email address is not verified. Please verify your email address to continue.',
+    'logout_success' => 'Logout successfully.',
+    'logout_fail' => 'Logout fail.',
 ];

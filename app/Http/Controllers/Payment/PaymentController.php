@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers\Payment;
 
+use App\Enums\PaymentGetway;
 use App\Http\Controllers\Controller;
-use App\Services\Payment\Gateway\FincodePaymentService;
+use App\Services\Payment\Gateway\StripePaymentService;
+use App\Services\Payment\Gateway\VNPayPaymentService;
 use App\Services\Payment\PaymentProcessorService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {
     public function payment(Request $request)
     {
-        // $paymentGateway = new PaymentProcessorService(new MomoPaymentService());
-        $paymentGateway = new PaymentProcessorService(new FincodePaymentService());
-        // $paymentGateway = new PaymentProcessorService(new StripePaymentService());
-        $paymentGateway->setParams($request)->handle();
+        if ($request->gateway == PaymentGetway::ATM) {
+            $paymentGateway = new PaymentProcessorService(new VNPayPaymentService());
+        } else if ($request->gateway == PaymentGetway::STRIPE) {
+            $paymentGateway = new PaymentProcessorService(new StripePaymentService());
+        }
 
-        return redirect()->route('users.index');
+        $payment = $paymentGateway->setParams($request)->handle();
+
+        if ($payment->getStatusCode() == Response::HTTP_OK) {
+            return $this->responseSuccess([
+                'payment_url' => $payment->getData()->payment_url
+            ]);
+        }
+
+        return $this->responseErrors($payment->getData()->message, $payment->getStatusCode());
     }
 }
