@@ -19,6 +19,7 @@ use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Http\Requests\Api\Follow\FollowRequest;
 use App\Http\Resources\Api\Book\TopBookResource;
 use App\Services\Api\Book\CheckRolePackageService;
 use App\Services\Api\Book\GetTopBookService;
@@ -177,14 +178,10 @@ class BookController extends Controller
         return $this->responseErrors(__('book.not_found'));
     }
 
-    public function followBook(Request $request)
+    public function followBook(FollowRequest $request)
     {
-        $bookId = $request->validate([
-            'book_id' => 'required|integer|exists:books,id',
-        ]);
-
-        $book = resolve(FolowBookService::class)->setParams($bookId)->handle();
-        $follows = resolve(CountFollowService::class)->setParams($bookId)->handle();
+        $book = resolve(FolowBookService::class)->setParams($request->validated())->handle();
+        $follows = resolve(CountFollowService::class)->setParams($request->validated())->handle();
 
 
         if ($book) {
