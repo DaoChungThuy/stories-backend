@@ -7,6 +7,8 @@ use App\Models\Author;
 use App\Models\Book;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 class BookRepository extends BaseRepository implements BookRepositoryInterface
 {
@@ -50,5 +52,66 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     public function getInstance()
     {
         return $this->model;
+    }
+    /**
+     * Find book by id.
+     * @param int $id
+     * @return Book
+     */
+    public function findBookById($id, $limitChapter)
+    {
+        return $this->model->with([
+            'author',
+            'chapters' => function ($chapter) use ($limitChapter) {
+                $chapter->orderByDESC('chapter_number')->limit($limitChapter);
+            },
+            'genre'
+        ])->withCount('followers', 'bookLikes', 'chapters')->find($id);
+    }
+
+    /**
+     * Get reading history.
+     * @param int $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getReadingHistory($id)
+    {
+        return $this->model->whereHas('userChapters', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->with('userChapters.chapter')
+            ->withCount('bookLikes');
+    }
+
+    /**
+     * Get top book.
+     * @param int $days
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getTopBook($days, $limit)
+    {
+        return $this->model->withCount([
+            'bookLikes' => fn ($query) => $query->where('created_at', '>=', now()->subDays($days))
+        ])->with(['chapters' => fn ($query) => $query->orderByDESC('chapter_number')])
+            ->orderByDesc('book_likes_count')->limit($limit);
+    }
+
+    public function getBookList()
+    {
+        return $this->model->with('author')->orderByDesc('updated_at');
+    }
+
+    public function getBookByChapterId($id_chapter)
+    {
+        return $this->model->whereHas(
+            'chapters',
+            fn ($query) => $query->where('id', $id_chapter)
+        )->first();
+    }
+
+    public function getBookByChapter($chapterId)
+    {
+        return $this->model->whereHas('chapters', function ($chapter) use ($chapterId) {
+            $chapter->where('id', $chapterId);
+        })->first();
     }
 }

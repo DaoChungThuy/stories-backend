@@ -19,4 +19,11 @@ class UserChapter extends Model
         'user_id',
         'chapter_id',
     ];
+
+    protected $table = 'user_chapter';
+
+    public function chapter()
+    {
+        return $this->belongsTo(Chapter::class);
+    }
 }

@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\Follow\FollowController;
 use App\Http\Controllers\Api\Genre\GenreController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Book\BookController;
 use App\Http\Controllers\Api\Author\AuthorController;
+use App\Http\Controllers\Api\ChapterImage\ChapterImageController;
+use App\Http\Controllers\Api\Chapter\ChapterController;
 use App\Http\Controllers\Api\ServicePackage\ServicePackageController;
 use App\Http\Controllers\Payment\PaymentController;
 use Illuminate\Http\Request;
@@ -26,11 +29,10 @@ Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
     });
     Route::post('/generate-desc', [BookController::class, 'generateBookDesc']);
+    Route::group(['prefix' => 'admin'], function () {
+        Route::resource('genres', GenreController::class);
+    });
 });
-
-Route::POST('payment', [PaymentController::class, 'payment']);
-
-Route::resource('genres', GenreController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/send-email', [AuthController::class, 'sendEmail']);
@@ -40,10 +42,7 @@ Route::group(['prefix' => 'service-package'], function () {
     Route::get('', [ServicePackageController::class, 'getData']);
     Route::post('', [ServicePackageController::class, 'create']);
     Route::get('data-popular', [ServicePackageController::class, 'getDataPopular']);
-});
-
-Route::group(['prefix' => 'user-service-packages'], function () {
-    Route::post('', [ServicePackageController::class, 'registerServicePackage']);
+    Route::get('/{id}', [ServicePackageController::class, 'findPackage']);
 });
 
 Route::middleware('checkLogin')->group(function () {
@@ -59,6 +58,11 @@ Route::middleware('checkLogin')->group(function () {
         Route::post('createBook', [BookController::class, 'store']);
         Route::put('updateBook/{bookId}', [BookController::class, 'update']);
         Route::delete('/book/{book_id}', [BookController::class, 'destroy']);
+        Route::prefix('chapters')->group(function () {
+            Route::get('/{bookId}', [ChapterController::class, 'index']);
+            Route::post('/', [ChapterController::class, 'store']);
+            Route::get('/getNumber/{bookId}', [ChapterController::class, 'countChaptersByBookId']);
+        });
     });
 
     Route::group(['prefix' => 'payment'], function () {
@@ -68,3 +72,16 @@ Route::middleware('checkLogin')->group(function () {
 
 Route::get('search', [BookController::class, 'search']);
 Route::get('filter', [BookController::class, 'filter']);
+
+Route::group(['prefix' => 'book'], function () {
+    Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
+    Route::get('', [BookController::class, 'getBookList']);
+    Route::get('/reading-history', [BookController::class, 'getHistory']);
+    Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
+    Route::get('/{id}', [BookController::class, 'getData']);
+    Route::post('/follow', [BookController::class, 'followBook'])->middleware('checkLogin');
+    Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
+});
+
+Route::get('chapter-images/{chapter_id}', [ChapterImageController::class, 'index']);
+Route::get('check-service/{id_chapter}/{type?}', [BookController::class, 'checkService']);

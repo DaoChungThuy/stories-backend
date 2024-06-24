@@ -34,7 +34,7 @@ class Book extends Model implements Searchable
      */
     public function getCoverImageAttribute($value)
     {
-        return asset(Storage::url($value));
+        return asset(Storage::url('image/' . $value));
     }
 
     /**
@@ -105,5 +105,24 @@ class Book extends Model implements Searchable
             $this->title,
             $this->description,
         );
+    }
+    /**
+     * Get the user chapter for the book.
+     * @return \Illuminate\Database\Eloquent\Relations\hasOneThrough
+     */
+    public function userChapters()
+    {
+        return $this->hasOneThrough(UserChapter::class, Chapter::class);
+    }
+
+    /**
+     * Check if the book is followed by a user.
+     *
+     * @param int $userId
+     * @return bool
+     */
+    public function isFollowedByUser($userId)
+    {
+        return $this->followers()->where('user_id', $userId)->exists();
     }
 }

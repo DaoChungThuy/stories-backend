@@ -26,5 +26,8 @@ return [
     'update_success' => 'Update success.',
     'search_success' => 'Search success.',
     'search_fail' => 'Search fail',
-    'search_no_find' => 'No results were found'
+    'search_no_find' => 'No results were found',
+    'not_found' => 'Book not found.',
+    'follow_success' => 'follow book success.',
+    'follow_failed' => 'Handle follow failed.',
 ];
