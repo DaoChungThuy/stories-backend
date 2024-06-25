@@ -19,4 +19,6 @@ class BookLike extends Model
         'user_id',
         'book_id',
     ];
+
+    protected $table = 'book_like';
 }
