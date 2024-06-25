@@ -114,4 +114,14 @@ class Book extends Model
     {
         return $this->followers()->where('user_id', $userId)->exists();
     }
+
+    /**
+     * Get the first chapter id of the book.
+     * @param int $bookId
+     * @return int
+     */
+    public function firstChapterid($bookId)
+    {
+        return $this->chapters()->where('book_id', $bookId)->first()->id;
+    }
 }
