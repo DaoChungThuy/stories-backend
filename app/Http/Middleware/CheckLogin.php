@@ -21,7 +21,7 @@ class CheckLogin
         if (!auth()->check()) {
             Log::info('Token not found or token expired');
             return response()->json([
-                'status' => 'failure',
+                'code_error' => 'unauthenticated',
                 'message' => 'Token not found or token expired',
             ], Response::HTTP_UNAUTHORIZED);
         }
