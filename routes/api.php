@@ -47,7 +47,7 @@ Route::group(['prefix' => 'service-package'], function () {
 
 Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'user-service-packages'], function () {
-        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService')->withoutMiddleware('checkLogin');
     });
 
     Route::group(['prefix' => 'authors'], function () {
