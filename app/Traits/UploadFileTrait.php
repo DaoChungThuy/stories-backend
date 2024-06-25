@@ -9,7 +9,7 @@ trait UploadFileTrait
 {
     public function uploadFile(UploadedFile $file)
     {
-        $imageName = 'author_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $imageName = 'img_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
         $path_name = 'image/';
 
         if (Storage::disk('public')->put($path_name . $imageName, file_get_contents($file->getRealPath()))) {
