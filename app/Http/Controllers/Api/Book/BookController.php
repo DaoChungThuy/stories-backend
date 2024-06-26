@@ -233,8 +233,13 @@ class BookController extends Controller
             'type' => $type,
         ])->handle();
 
-        return response()->json([
-            'status' => $check
+        if($check->getStatusCode() != Response::HTTP_OK) {
+            return $this->responseErrors(__('common.error_server'));
+        }
+
+        return $this->responseSuccess([
+            'data' => $check->getData()->data,
+            'status' => $check->getData()->status
         ]);
     }
 }
