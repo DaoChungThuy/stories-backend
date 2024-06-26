@@ -20,4 +20,6 @@ return [
     'email_not_verified' => 'Your email address is not verified. Please verify your email address to continue.',
     'logout_success' => 'Logout successfully.',
     'logout_fail' => 'Logout fail.',
+    'register_success' => 'Register successfully.',
+    'register_fail' => 'Register fail.',
 ];
