@@ -132,12 +132,6 @@ class BookController extends Controller
             return $this->responseErrors(__('book.search_fail'));
         }
 
-        if ($books->isEmpty()) {
-            return $this->responseSuccess([
-                'message' => __('book.search_no_find'),
-            ]);
-        }
-
         return $this->responseSuccess([
             'message' => __('book.search_success'),
             'data' => $books,
@@ -151,13 +145,7 @@ class BookController extends Controller
         if (!$books) {
             return $this->responseErrors(__('book.search_fail'));
         }
-
-        if ($books->isEmpty()) {
-            return $this->responseSuccess([
-                'message' => __('book.search_no_find'),
-            ]);
-        }
-
+        
         return $this->responseSuccess([
             'message' => __('book.search_success'),
             'data' => $books,

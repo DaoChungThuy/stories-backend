@@ -32,19 +32,20 @@ class SearchBookService extends BaseService
                 ->perform($this->data);
 
             $formattedResults = $searchResults->map(function ($result) {
-                if ($result->type === 'authors') {
-                    $author = Author::find($result->title);
-                    return [
-                        'type' => $result->type,
-                        'author' => $author->toArray(),
-                    ];
-                } elseif ($result->type === 'books') {
-                    $book = Book::find($result->title);
-                    return [
-                        'type' => $result->type,
-                        'book' => $book->toArray(),
-                    ];
+                $resultData = null;
+                switch ($result->type) {
+                    case 'authors':
+                        $resultData = Author::find($result->searchable->id)->toArray();
+                        break;
+                    case 'books':
+                        $resultData = Book::find($result->searchable->id)->toArray();
+                        break;
                 }
+
+                return [
+                    'type' => $result->type,
+                    'data' => $resultData,
+                ];
             });
 
             return $formattedResults;
