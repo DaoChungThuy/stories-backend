@@ -29,15 +29,15 @@ class AuthController extends Controller
 
             if ($user) {
                 return $this->responseSuccess([
-                    'message' => __('messages.user.success_register'),
+                    'message' => __('auth.register_success'),
                 ], Response::HTTP_CREATED);
             }
 
-            return $this->responseErrors(__('messages.user.register_error'));
+            return $this->responseErrors(__('auth.register_fail'));
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
-            return $this->responseErrors(__('messages.error_server'));
+            return $this->responseErrors(__('auth.register_fail'));
         }
     }
 
@@ -91,7 +91,7 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if (!$token = auth()->attempt($credentials)) {
-            return $this->responseErrors(__('auth.unauthorized'), Response::HTTP_UNAUTHORIZED);
+            return $this->responseErrors('wrong account information', Response::HTTP_UNAUTHORIZED);
         }
 
         $user = auth()->user();
