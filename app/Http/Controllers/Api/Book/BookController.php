@@ -13,11 +13,13 @@ use App\Services\Api\Book\GenerateDescBookService;
 use App\Http\Requests\Api\Book\CreateBookRequest;
 use App\Http\Resources\Api\Book\BookResource;
 use App\Services\Api\Book\CreateBookService;
+use App\Services\Follow\CountFollowService;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\Api\Book\GetBookByAuthorService;
 use Illuminate\Http\Request;
 use App\Services\Api\Book\GetReadingHistoryService;
 use App\Http\Requests\Api\Book\UpdateBookRequest;
+use App\Http\Requests\Api\Follow\FollowRequest;
 use App\Services\Api\Book\FilterBookService;
 use App\Services\Api\Book\SearchBookService;
 use App\Http\Resources\Api\Book\TopBookResource;
@@ -217,15 +219,16 @@ class BookController extends Controller
         return $this->responseErrors(__('book.not_found'));
     }
 
-    public function followBook(Request $request)
+    public function followBook(FollowRequest $request)
     {
-        $book = resolve(FolowBookService::class)->setParams($request->validate([
-            'book_id' => 'required|integer|exists:books,id',
-        ]))->handle();
+        $book = resolve(FolowBookService::class)->setParams($request->validated())->handle();
+        $follows = resolve(CountFollowService::class)->setParams($request->validated())->handle();
+
 
         if ($book) {
             return $this->responseSuccess([
                 'message' => __('book.follow_success'),
+                'follows' => $follows,
             ]);
         }
 

@@ -39,4 +39,14 @@ class FollowRepository extends BaseRepository implements FollowRepositoryInterfa
             ->where('user_id', auth()->user()->id)
             ->exists();
     }
+
+    /**
+     * count user follow book
+     * @param $book_id
+     * @return int
+     */
+    public function countFollow($book_id)
+    {
+        return $this->model->where('book_id', $book_id)->count();
+    }
 }

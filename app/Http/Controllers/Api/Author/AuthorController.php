@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Author;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Author\CreateAuthorRequest;
 use App\Http\Resources\Api\Author\AuthorResource;
@@ -10,6 +11,7 @@ use App\Services\Api\Author\CreateAuthorService;
 use App\Services\Api\Author\GetAuthorService;
 use App\Services\Api\Book\GetBooksPostedService;
 use App\Services\Api\Author\getFollowersService;
+use App\Services\User\UpdateUserService;
 
 class AuthorController extends Controller
 {
@@ -17,14 +19,16 @@ class AuthorController extends Controller
     {
         $author = resolve(CreateAuthorService::class)->setParams($request->validated())->handle();
 
-        if (!$author) {
-            return $this->responseErrors(__('author.register_failed'));
+        if ($author) {
+            resolve(UpdateUserService::class)->setParams(['user_id' => auth()->user()->id, 'role' => UserRole::AUTHOR])->handle();
+
+            return $this->responseSuccess([
+                'message' => __('author.register_success'),
+                'data' => new AuthorResource($author),
+            ]);
         }
 
-        return $this->responseSuccess([
-            'message' => __('author.register_success'),
-            'data' => new AuthorResource($author),
-        ]);
+        return $this->responseErrors(__('author.register_failed'));
     }
 
     /**

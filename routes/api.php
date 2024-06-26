@@ -47,7 +47,7 @@ Route::group(['prefix' => 'service-package'], function () {
 
 Route::middleware('checkLogin')->group(function () {
     Route::group(['prefix' => 'user-service-packages'], function () {
-        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService');
+        Route::get('/{sessionId}/{serviceId}/{userId}', [ServicePackageController::class, 'registerServicePackage'])->name('registerService')->withoutMiddleware('checkLogin');
     });
 
     Route::group(['prefix' => 'authors'], function () {
@@ -78,7 +78,6 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('', [BookController::class, 'getBookList']);
     Route::get('/reading-history', [BookController::class, 'getHistory']);
     Route::get('/get-top-book/{days}', [BookController::class, 'getTopBook']);
-    Route::get('/{id}', [BookController::class, 'getData']);
     Route::post('/follow', [BookController::class, 'followBook'])->middleware('checkLogin');
     Route::get('/{id}/{limitChapter?}', [BookController::class, 'getData']);
 });
