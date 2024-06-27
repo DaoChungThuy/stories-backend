@@ -62,7 +62,7 @@ class BookController extends Controller
 
         return $this->responseSuccess([
             'message' => __('book.generate_desc_success'),
-            'data' => $newDescription,
+            'data' => $textNewDescription,
         ]);
     }
 
@@ -233,7 +233,7 @@ class BookController extends Controller
             'type' => $type,
         ])->handle();
 
-        if($check->getStatusCode() != Response::HTTP_OK) {
+        if ($check->getStatusCode() != Response::HTTP_OK) {
             return $this->responseErrors(__('common.error_server'));
         }
 
