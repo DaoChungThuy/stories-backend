@@ -8,6 +8,7 @@ use App\Models\ServicePackage;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckRolePackageService extends BaseService
 {
@@ -23,18 +24,27 @@ class CheckRolePackageService extends BaseService
         try {
             $book = $this->bookRepository->getBookByChapterId($this->data['chapter_id']);
             $type = $this->data['type'];
+            $packageType = $book->package_type;
 
-            if ($book->package_type == PackageType::FREE) return true;
+            $status = false;
 
-            if ($book->package_type == PackageType::BASE && in_array($type, [PackageType::BASE, PackageType::PREMIUM])) return true;
+            if ($packageType == PackageType::FREE ||
+                ($packageType == PackageType::BASE && in_array($type, [PackageType::BASE, PackageType::PREMIUM])) ||
+                ($packageType == PackageType::PREMIUM && $type == PackageType::PREMIUM)) {
+                $status = true;
+            }
 
-            if ($book->package_type == PackageType::PREMIUM && $type == PackageType::PREMIUM) return true;
+            return response()->json([
+                'data' => $book,
+                'status' => $status
+            ], Response::HTTP_OK);
 
-            return false;
         } catch (Exception $e) {
             Log::info($e);
 
-            return false;
+            return response()->json([
+                'message' => __('common.error_server'),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
