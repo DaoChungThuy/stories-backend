@@ -39,6 +39,10 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
         return $this->model->where('author_id', $authorId);
     }
 
+    public function getInstance()
+    {
+        return $this->model;
+    }
     /**
      * Find book by id.
      * @param int $id

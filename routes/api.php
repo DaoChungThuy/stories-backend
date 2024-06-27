@@ -70,6 +70,9 @@ Route::middleware('checkLogin')->group(function () {
     });
 });
 
+Route::get('search', [BookController::class, 'search']);
+Route::get('filter', [BookController::class, 'filter']);
+
 Route::group(['prefix' => 'book'], function () {
     Route::get('/chapter/{chapterId}', [BookController::class, 'getBookChapters']);
     Route::get('', [BookController::class, 'getBookList']);

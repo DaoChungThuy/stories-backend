@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 
-class Author extends Model
+class Author extends Model implements Searchable
 {
     use HasFactory, SoftDeletes;
 
@@ -18,7 +20,6 @@ class Author extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'author',
         'create_by_user_id',
         'author_name',
         'avatar',
@@ -46,5 +47,14 @@ class Author extends Model
     public function books()
     {
         return $this->hasMany(Book::class);
+    }
+
+    public function getSearchResult(): SearchResult
+    {
+        return new SearchResult(
+            $this,
+            $this->id,
+            $this->author_name,
+        );
     }
 }
