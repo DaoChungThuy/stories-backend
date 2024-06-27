@@ -25,6 +25,7 @@ class AuthorController extends Controller
             return $this->responseSuccess([
                 'message' => __('author.register_success'),
                 'data' => new AuthorResource($author),
+                'role' => UserRole::AUTHOR
             ]);
         }
 
