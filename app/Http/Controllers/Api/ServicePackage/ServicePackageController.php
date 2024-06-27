@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\ServicePackage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ServicePackage\CreateServicePackageRequest;
 use App\Http\Requests\Api\ServicePackage\RegisterUserServiceRequest;
+use App\Models\ServicePackage;
 use App\Services\Api\ServicePackage\CreateServicePackageService;
 use App\Services\Api\ServicePackage\FindServicePackageById;
 use App\Services\Api\ServicePackage\GetServicePackageListPopularService;
@@ -94,7 +95,9 @@ class ServicePackageController extends Controller
             return redirect(env('RETURN_URL_ERROR')  . '&message=' . $userService->getData()->message);
         }
 
-        return redirect(env('RETURN_URL_SUCCESS'));
+        $service = ServicePackage::find($serviceId);
+
+        return redirect(env('RETURN_URL_SUCCESS') . '&role=' . $service->type);
     }
 
     /**

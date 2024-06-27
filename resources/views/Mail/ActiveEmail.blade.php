@@ -59,7 +59,7 @@
                                                                                         style="font-size: 0px;">
                                                                                         <a target="_blank">
                                                                                             <img class="adapt-img"
-                                                                                                src="../../../public/cover.png"
+                                                                                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLAwK59LnSMq0L0xBptuw7M-l2GiigYnAQDx2pkwfbE7zIZc8zTrRYAC6oJ-OSwDnVtEw&usqp=CAU"
                                                                                                 alt="Image"
                                                                                                 style="display: block;"
                                                                                                 title="Image"
